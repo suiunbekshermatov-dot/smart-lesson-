@@ -189,6 +189,22 @@
     </div>
   </div>
 
+  <!-- ПОЛНОЭКРАННЫЙ ПРОСМОТРЩИК УРОКА НА 75" СМАРТ-ПАНЕЛИ -->
+  <div id="fullViewerModal" class="hidden fixed inset-0 bg-slate-950/95 z-50 flex flex-col p-4">
+    <div class="flex items-center justify-between px-6 py-3 bg-slate-900/90 rounded-2xl border border-slate-800 mb-4">
+      <div class="flex items-center gap-3">
+        <span class="w-3.5 h-3.5 bg-emerald-500 rounded-full animate-pulse"></span>
+        <h4 id="viewerFileName" class="text-xl font-bold text-white tracking-wide truncate max-w-2xl">...</h4>
+      </div>
+      <button onclick="closeViewerModal()" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-6 py-2.5 rounded-xl text-lg shadow-lg active:scale-95 transition-all">
+        ✕ Жабуу / Закрыть
+      </button>
+    </div>
+    <div id="viewerContent" class="flex-1 flex items-center justify-center overflow-hidden">
+      <!-- Динамический контент: картинка, PDF или презентация -->
+    </div>
+  </div>
+
   <script>
     const teachersData = [
   {
@@ -824,7 +840,6 @@
       document.getElementById('pwdModalTeacherName').innerText = teacher.name;
       document.getElementById('pwdModal').classList.remove('hidden');
       
-      // Фокус для немедленного вызова экранной клавиатуры панели
       setTimeout(() => inp.focus(), 150);
     }
 
@@ -870,6 +885,7 @@
       currentTeacher = null;
     }
 
+    // Сохранение файлов с их содержимым в браузер
     function uploadLocalFile(event) {
       const files = event.target.files;
       if (!files.length || !currentTeacher) return;
@@ -877,19 +893,25 @@
       const storeKey = `files_teacher_${currentTeacher.id}`;
       let saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
 
-      for (let i = 0; i < files.length; i++) {
-        saved.push({
-          name: files[i].name,
-          size: (files[i].size / (1024 * 1024)).toFixed(2) + ' MB',
-          date: new Date().toLocaleDateString()
-        });
-      }
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          saved.push({
+            name: file.name,
+            size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+            date: new Date().toLocaleDateString(),
+            dataUrl: e.target.result
+          });
+          localStorage.setItem(storeKey, JSON.stringify(saved));
+          loadSavedFiles(currentTeacher.id);
+        };
+        reader.readAsDataURL(file);
+      });
 
-      localStorage.setItem(storeKey, JSON.stringify(saved));
-      loadSavedFiles(currentTeacher.id);
       event.target.value = '';
     }
 
+    // Вывод файлов
     function loadSavedFiles(teacherId) {
       const storeKey = `files_teacher_${teacherId}`;
       const saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
@@ -904,19 +926,71 @@
       saved.forEach((f, idx) => {
         const card = document.createElement('div');
         card.className = "bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between";
+        
+        let badge = 'FILE';
+        if (f.name.match(/\.(ppt|pptx)$/i)) badge = 'PPT';
+        else if (f.name.match(/\.pdf$/i)) badge = 'PDF';
+        else if (f.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)) badge = 'IMG';
+
         card.innerHTML = `
           <div>
-            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold mb-3">PPT</div>
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold mb-3">${badge}</div>
             <h5 class="text-xl font-bold text-slate-800 break-words mb-1">${f.name}</h5>
             <p class="text-slate-400 text-sm">${f.size} • ${f.date}</p>
           </div>
           <div class="mt-6 flex gap-3">
-            <button onclick="alert('${translations[currentLang].openInLesson}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold">${translations[currentLang].openInLesson}</button>
+            <button onclick="viewLessonFile(${teacherId}, ${idx})" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold shadow-md active:scale-95 transition-all">
+              ${translations[currentLang].openInLesson}
+            </button>
             <button onclick="deleteSavedFile(${teacherId}, ${idx})" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-4 py-3.5 rounded-xl font-bold">🗑</button>
           </div>
         `;
         list.appendChild(card);
       });
+    }
+
+    // Полноэкранный просмотрщик без системных alert
+    function viewLessonFile(teacherId, idx) {
+      const storeKey = `files_teacher_${teacherId}`;
+      const saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
+      const file = saved[idx];
+      if (!file) return;
+
+      const viewer = document.getElementById('fullViewerModal');
+      const container = document.getElementById('viewerContent');
+      document.getElementById('viewerFileName').innerText = file.name;
+
+      if (!file.dataUrl) {
+        // Если файл был загружен в старой версии без содержимого, просим перезагрузить
+        container.innerHTML = `
+          <div class="text-center text-white space-y-3">
+            <div class="text-5xl">⚠️</div>
+            <p class="text-xl font-bold">Бул файл эски форматта сакталган.</p>
+            <p class="text-slate-400">Сураныч, файлды өчүрүп, жаңы версияда кайра жүктөңүз.</p>
+          </div>
+        `;
+      } else if (file.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
+        container.innerHTML = `<img src="${file.dataUrl}" class="max-h-[84vh] max-w-full object-contain mx-auto rounded-xl shadow-2xl">`;
+      } else if (file.name.match(/\.pdf$/i)) {
+        container.innerHTML = `<iframe src="${file.dataUrl}" class="w-full h-[84vh] rounded-xl border-0 bg-white"></iframe>`;
+      } else {
+        container.innerHTML = `
+          <div class="text-center py-12 text-white space-y-5">
+            <div class="text-7xl">📊</div>
+            <h3 class="text-3xl font-black">${file.name}</h3>
+            <p class="text-slate-300 text-lg">Презентация сабакка даяр.</p>
+            <a href="${file.dataUrl}" download="${file.name}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-5 rounded-2xl text-2xl shadow-xl active:scale-95 transition-all">
+              PowerPoint / Экранда ачуу ↗
+            </a>
+          </div>
+        `;
+      }
+      viewer.classList.remove('hidden');
+    }
+
+    function closeViewerModal() {
+      document.getElementById('fullViewerModal').classList.add('hidden');
+      document.getElementById('viewerContent').innerHTML = '';
     }
 
     function deleteSavedFile(teacherId, idx) {
