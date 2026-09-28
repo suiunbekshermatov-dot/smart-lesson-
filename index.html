@@ -14,7 +14,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans select-none">
 
-  <!-- ЖОГОРКУ ШАПКА / ВЕРХНЯЯ ШАПКА -->
+  <!-- ЖОГОРКУ ШАПКА -->
   <header class="bg-blue-950 text-white px-8 py-5 flex items-center justify-between shadow-lg sticky top-0 z-40">
     <div class="flex items-center gap-5">
       <div class="bg-blue-600 p-3.5 rounded-2xl shadow-inner">
@@ -27,13 +27,13 @@
     </div>
 
     <div class="flex items-center gap-5">
-      <!-- ТИЛ АЛМАШТЫРУУ / ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА -->
+      <!-- ТИЛ АЛМАШТЫРУУ -->
       <div class="bg-blue-900/80 p-1.5 rounded-2xl border border-blue-700 flex gap-1">
         <button onclick="setLanguage('kg')" id="langBtnKG" class="px-4 py-2 rounded-xl font-black text-sm transition-all bg-amber-400 text-slate-950 shadow">KG</button>
         <button onclick="setLanguage('ru')" id="langBtnRU" class="px-4 py-2 rounded-xl font-black text-sm transition-all text-blue-200 hover:text-white">RU</button>
       </div>
 
-      <!-- ЧАСЫ БИШКЕКА -->
+      <!-- ЧАСЫ -->
       <div id="clock" class="text-3xl font-mono font-black bg-blue-900/90 px-5 py-2 rounded-2xl border border-blue-700 text-amber-300 shadow-inner">
         00:00:00
       </div>
@@ -45,7 +45,7 @@
         <svg class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
 
-      <!-- АДМИН КАБИНЕТ (С ПАРОЛЕМ) -->
+      <!-- АДМИН КАБИНЕТ -->
       <button onclick="openAdminAuthModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-5 py-3 rounded-2xl text-base flex items-center gap-2 shadow-md active:scale-95 transition-all">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
         <span data-i18n="adminBtn">Админ кабинет</span>
@@ -53,13 +53,13 @@
     </div>
   </header>
 
-  <!-- АЛФАВИТТИК ТИЛКЕ / АЛФАВИТНАЯ ЛЕНТА -->
+  <!-- АЛФАВИТ -->
   <div class="bg-white border-b border-slate-200 px-8 py-3 flex items-center justify-between overflow-x-auto shadow-sm">
     <span class="text-sm font-bold text-slate-400 uppercase tracking-wider mr-4" data-i18n="alphabetLabel">Алфавит:</span>
     <div id="alphabetList" class="flex gap-2"></div>
   </div>
 
-  <!-- НЕГИЗГИ ТИЗМЕ / ГЛАВНАЯ ВИТРИНА -->
+  <!-- НЕГИЗГИ ТИЗМЕ -->
   <main id="mainGridSection" class="flex-1 p-8 max-w-7xl mx-auto w-full">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-black text-slate-700">
@@ -71,7 +71,7 @@
     <div id="teachersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
   </main>
 
-  <!-- АЧЫЛГАН ПАПКА / ПАПКА ПРЕПОДАВАТЕЛЯ -->
+  <!-- АЧЫЛГАН ПАПКА -->
   <section id="folderView" class="hidden flex-1 p-8 flex flex-col max-w-7xl mx-auto w-full">
     <div class="bg-white p-6 rounded-3xl shadow-lg border border-slate-200 flex items-center justify-between mb-6">
       <div class="flex items-center gap-5">
@@ -96,15 +96,15 @@
       <input type="file" id="fileInput" class="hidden" multiple onchange="uploadLocalFile(event)">
       <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl text-2xl font-black shadow-md inline-flex items-center gap-3 active:scale-95">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"></path></svg>
-        <span data-i18n="uploadBtn">Жаңы презентация жүктөө (.pptx, .pdf)</span>
+        <span data-i18n="uploadBtn">Жаңы презентация жүктөө (.pptx, .pdf, сүрөт)</span>
       </button>
-      <p class="text-slate-500 mt-2 text-base" data-i18n="uploadHint">Бул сабак үчүн файлдар браузердин эсине коопсуз сакталат</p>
+      <p class="text-slate-500 mt-2 text-base" data-i18n="uploadHint">Презентациялар жана сүрөттөр сабак үчүн сакталат</p>
     </div>
 
     <div id="fileList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
-  <!-- ПРОСТОЕ ОКНО ВВОДА ПАРОЛЯ (ДЛЯ СИСТЕМНОЙ КЛАВИАТУРЫ СМАРТ-ПАНЕЛИ) -->
+  <!-- МОДАЛЬ ВВОДА ПАРОЛЯ УЧИТЕЛЯ -->
   <div id="pwdModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
       <div class="w-16 h-16 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
@@ -114,7 +114,6 @@
       <p class="text-slate-500 text-sm mb-5" data-i18n="enterPwdHint">Паролду жазып, кирүү баскычын басыңыз</p>
 
       <form onsubmit="handlePasswordSubmit(event)">
-        <!-- Активное поле ввода для вызова встроенной клавиатуры смарт-доски -->
         <div class="relative mb-5">
           <input type="password" id="pwdInput" required autocomplete="off" placeholder="••••••••" 
             class="w-full text-2xl font-mono text-center tracking-wider py-4 px-12 bg-slate-50 rounded-2xl border-2 border-slate-300 focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900 shadow-inner">
@@ -132,7 +131,7 @@
     </div>
   </div>
 
-  <!-- МОДАЛКА ВХОДА В АДМИНКУ ПО ПАРОЛЮ -->
+  <!-- МОДАЛЬ ВХОДА В АДМИНКУ ПО ПАРОЛЮ -->
   <div id="adminAuthModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
       <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -153,17 +152,20 @@
     </div>
   </div>
 
-  <!-- ПОЛНОЦЕННЫЙ КАБИНЕТ АДМИНИСТРАТОРА -->
+  <!-- ПОЛНОЦЕННЫЙ КАБИНЕТ АДМИНИСТРАТОРА (С ДОБАВЛЕНИЕМ/РЕДАКТИРОВАНИЕМ) -->
   <div id="adminPanelModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-6">
     <div class="bg-white rounded-3xl p-8 max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl">
-      <div class="flex items-center justify-between pb-4 border-b">
+      <div class="flex flex-wrap items-center justify-between pb-4 border-b gap-4">
         <div>
           <h3 class="text-2xl font-black text-slate-900" data-i18n="adminPanelTitle">Мугалимдерди жана сыр сөздөрдү башкаруу</h3>
-          <p class="text-slate-500 text-sm" data-i18n="adminPanelSubtitle">Жалпы 78 мугалимдин маалыматы жана сыр сөздөрү</p>
+          <p class="text-slate-500 text-sm" data-i18n="adminPanelSubtitle">Мугалимдердин маалыматы, сыр сөздөрү жана түзөтүүлөр</p>
         </div>
-        <div class="flex items-center gap-3">
-          <button onclick="exportCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm shadow">📥 Excel (CSV)</button>
-          <button onclick="copyAllPasswords()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-sm" data-i18n="copyBtn">Көчүрүп алуу</button>
+        <div class="flex flex-wrap items-center gap-3">
+          <button onclick="openAddTeacherModal()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm shadow flex items-center gap-2">
+            <span>+</span> <span data-i18n="addTeacherBtn">Жаңы мугалим кошуу</span>
+          </button>
+          <button onclick="exportCSV()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm shadow">📥 Excel (CSV)</button>
+          <button onclick="copyAllPasswords()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-sm" data-i18n="copyBtn">Көчүрүп алуу</button>
           <button onclick="closeAdminPanel()" class="text-slate-400 hover:text-slate-700 text-3xl font-bold ml-2">&times;</button>
         </div>
       </div>
@@ -176,6 +178,7 @@
               <th class="p-3 border-b" data-i18n="thName">Мугалимдин аты-жөнү</th>
               <th class="p-3 border-b" data-i18n="thEmail">Почтасы</th>
               <th class="p-3 border-b text-blue-700 font-mono" data-i18n="thPassword">Сыр сөз (Пароль)</th>
+              <th class="p-3 border-b text-right" data-i18n="thActions">Аракеттер</th>
             </tr>
           </thead>
           <tbody id="registryTableBody" class="text-sm divide-y"></tbody>
@@ -184,14 +187,56 @@
 
       <div class="flex justify-between items-center pt-2">
         <span class="text-xs text-slate-400" data-i18n="adminNote">Эскертүү: Паролдор купуя сакталышы керек</span>
-        <button onclick="closeAdminPanel()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl" data-i18n="closeModalBtn">Жабуу</button>
+        <button onclick="closeAdminPanel()" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl" data-i18n="closeModalBtn">Жабуу</button>
       </div>
     </div>
   </div>
 
-  <!-- ПОЛНОЭКРАННЫЙ ПРОСМОТРЩИК УРОКА НА 75" СМАРТ-ПАНЕЛИ -->
+  <!-- МОДАЛЬ ДОБАВЛЕНИЯ / РЕДАКТИРОВАНИЯ УЧИТЕЛЯ -->
+  <div id="teacherEditModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-4 border-b mb-6">
+        <h3 id="editModalTitle" class="text-2xl font-black text-slate-900">Жаңы мугалим кошуу</h3>
+        <button onclick="closeTeacherEditModal()" class="text-slate-400 hover:text-slate-700 text-3xl font-bold">&times;</button>
+      </div>
+
+      <form onsubmit="handleSaveTeacher(event)" class="space-y-4">
+        <input type="hidden" id="editTeacherId">
+        
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblFullName">Аты-жөнү (ФИО):</label>
+          <input type="text" id="teacherNameInput" required placeholder="Мисалы: Асанов Бакыт Эркинович" 
+            class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblEmail">Корпоративдик почтасы (Email):</label>
+          <input type="email" id="teacherEmailInput" required placeholder="bakyt.asanov@college.alatoo.edu.kg" 
+            class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblPassword">Сыр сөз (Пароль):</label>
+          <div class="flex gap-2">
+            <input type="text" id="teacherPwdInput" required placeholder="Мисалы: Alatoo#752" 
+              class="flex-1 font-mono text-base px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+            <button type="button" onclick="generateAutoPassword()" class="px-4 bg-slate-100 hover:bg-slate-200 font-bold rounded-xl text-sm border" data-i18n="btnGenPwd">
+              🎲 Генерация
+            </button>
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-4 border-t">
+          <button type="button" onclick="closeTeacherEditModal()" class="flex-1 py-3.5 bg-slate-200 hover:bg-slate-300 font-bold rounded-xl text-slate-700" data-i18n="cancelBtn">Жокко чыгаруу</button>
+          <button type="submit" class="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-md" data-i18n="saveBtn">Сактоо</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ПОЛНОЭКРАННЫЙ ПРОСМОТРЩИК УРОКА -->
   <div id="fullViewerModal" class="hidden fixed inset-0 bg-slate-950/95 z-50 flex flex-col p-4">
-    <div class="flex items-center justify-between px-6 py-3 bg-slate-900/90 rounded-2xl border border-slate-800 mb-4">
+    <div class="flex items-center justify-between px-6 py-3 bg-slate-900/90 rounded-2xl border border-slate-800 mb-3">
       <div class="flex items-center gap-3">
         <span class="w-3.5 h-3.5 bg-emerald-500 rounded-full animate-pulse"></span>
         <h4 id="viewerFileName" class="text-xl font-bold text-white tracking-wide truncate max-w-2xl">...</h4>
@@ -200,13 +245,12 @@
         ✕ Жабуу / Закрыть
       </button>
     </div>
-    <div id="viewerContent" class="flex-1 flex items-center justify-center overflow-hidden">
-      <!-- Динамический контент: картинка, PDF или презентация -->
-    </div>
+    <div id="viewerContent" class="flex-1 w-full h-full flex items-center justify-center overflow-hidden"></div>
   </div>
 
   <script>
-    const teachersData = [
+    // Базовая база 78 преподавателей
+    const defaultTeachersData = [
   {
     "id": 1,
     "name": "Abdraeva Aliya",
@@ -677,6 +721,17 @@
   }
 ];
 
+    // Загрузка учителей из LocalStorage (чтобы добавленные сохранялись)
+    function getStoredTeachers() {
+      const stored = localStorage.getItem('college_teachers_list');
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      localStorage.setItem('college_teachers_list', JSON.stringify(defaultTeachersData));
+      return defaultTeachersData;
+    }
+
+    let teachersData = getStoredTeachers();
     const MASTER_ADMIN_PASS = "admin2026";
 
     const translations = {
@@ -691,8 +746,8 @@
         clickHint: "Папканы ачуу үчүн өзүңүздүн ысымыңызды басыңыз",
         teacherRole: "Окутуучу",
         closeFolderBtn: "Папканы жабуу жана чыгуу",
-        uploadBtn: "Жаңы презентация жүктөө (.pptx, .pdf)",
-        uploadHint: "Бул сабак үчүн файлдар браузердин эсине коопсуз сакталат",
+        uploadBtn: "Жаңы презентация жүктөө (.pptx, .pdf, сүрөт)",
+        uploadHint: "Презентациялар жана сүрөттөр сабак үчүн сакталат",
         noFiles: "Бул папкада азырынча файл жок. Жогорудагы баскычты басып презентация жүктөңүз.",
         openInLesson: "Сабакта ачуу",
         enterPwdHint: "Паролду жазып, кирүү баскычын басыңыз",
@@ -704,13 +759,20 @@
         loginBtn: "Кирүү",
         adminAuthErrorMsg: "Мастер-пароль туура эмес!",
         adminPanelTitle: "Мугалимдерди жана сыр сөздөрдү башкаруу",
-        adminPanelSubtitle: "Жалпы 78 мугалимдин маалыматы жана сыр сөздөрү",
+        adminPanelSubtitle: "Мугалимдердин маалыматы, сыр сөздөрү жана түзөтүүлөр",
+        addTeacherBtn: "Жаңы мугалим кошуу",
         copyBtn: "Көчүрүп алуу",
         thName: "Мугалимдин аты-жөнү",
         thEmail: "Почтасы",
         thPassword: "Сыр сөз (Пароль)",
+        thActions: "Аракеттер",
         adminNote: "Эскертүү: Паролдор купуя сакталышы керек",
-        closeModalBtn: "Жабуу"
+        closeModalBtn: "Жабуу",
+        lblFullName: "Аты-жөнү (ФИО):",
+        lblEmail: "Корпоративдик почтасы (Email):",
+        lblPassword: "Сыр сөз (Пароль):",
+        btnGenPwd: "🎲 Генерация",
+        saveBtn: "Сактоо"
       },
       ru: {
         appTitle: "Портал учебных материалов",
@@ -723,9 +785,9 @@
         clickHint: "Нажмите на свое имя, чтобы открыть папку",
         teacherRole: "Преподаватель",
         closeFolderBtn: "Закрыть папку и выйти",
-        uploadBtn: "Загрузить презентацию (.pptx, .pdf)",
-        uploadHint: "Файлы для урока безопасно сохраняются в памяти устройства",
-        noFiles: "В этой папке пока нет файлов. Нажмите кнопку выше для загрузки презентации.",
+        uploadBtn: "Загрузить презентацию (.pptx, .pdf, картинку)",
+        uploadHint: "Файлы для урока сохраняются прямо в браузере",
+        noFiles: "В этой папке пока нет файлов. Нажмите кнопку выше для загрузки.",
         openInLesson: "Открыть на уроке",
         enterPwdHint: "Введите пароль и нажмите войти",
         cancelBtn: "Отмена",
@@ -736,13 +798,20 @@
         loginBtn: "Войти",
         adminAuthErrorMsg: "Неверный мастер-пароль!",
         adminPanelTitle: "Управление преподавателями и паролями",
-        adminPanelSubtitle: "Реестр всех 78 преподавателей с паролями и почтами",
+        adminPanelSubtitle: "Реестр преподавателей, пароли и редактирование",
+        addTeacherBtn: "Добавить преподавателя",
         copyBtn: "Копировать всё",
         thName: "ФИО Преподавателя",
         thEmail: "Почта (Email)",
         thPassword: "Секретный пароль",
+        thActions: "Действия",
         adminNote: "Внимание: пароли строго конфиденциальны",
-        closeModalBtn: "Закрыть"
+        closeModalBtn: "Закрыть",
+        lblFullName: "ФИО Преподавателя:",
+        lblEmail: "Корпоративная почта (Email):",
+        lblPassword: "Секретный пароль:",
+        btnGenPwd: "🎲 Генерация",
+        saveBtn: "Сохранить"
       }
     };
 
@@ -769,9 +838,7 @@
       document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
       buildAlphabet();
       renderTeachers(teachersData);
-      if (currentTeacher) {
-        loadSavedFiles(currentTeacher.id);
-      }
+      if (currentTeacher) loadSavedFiles(currentTeacher.id);
     }
 
     setInterval(() => {
@@ -831,7 +898,7 @@
       renderTeachers(filtered);
     });
 
-    // Модальное окно пароля учителя
+    // Пароль учителя
     function openPwdModal(teacher) {
       currentTeacher = teacher;
       const inp = document.getElementById('pwdInput');
@@ -839,14 +906,12 @@
       document.getElementById('pwdError').classList.add('hidden');
       document.getElementById('pwdModalTeacherName').innerText = teacher.name;
       document.getElementById('pwdModal').classList.remove('hidden');
-      
       setTimeout(() => inp.focus(), 150);
     }
 
     function cancelPwdModal() {
       document.getElementById('pwdModal').classList.add('hidden');
       currentTeacher = null;
-      document.getElementById('pwdInput').value = '';
     }
 
     function togglePwdVisibility() {
@@ -885,7 +950,7 @@
       currentTeacher = null;
     }
 
-    // Сохранение файлов с их содержимым в браузер
+    // Загрузка файлов
     function uploadLocalFile(event) {
       const files = event.target.files;
       if (!files.length || !currentTeacher) return;
@@ -902,8 +967,12 @@
             date: new Date().toLocaleDateString(),
             dataUrl: e.target.result
           });
-          localStorage.setItem(storeKey, JSON.stringify(saved));
-          loadSavedFiles(currentTeacher.id);
+          try {
+            localStorage.setItem(storeKey, JSON.stringify(saved));
+            loadSavedFiles(currentTeacher.id);
+          } catch(err) {
+            alert('Файл чоң болгондуктан эс толду!');
+          }
         };
         reader.readAsDataURL(file);
       });
@@ -911,7 +980,6 @@
       event.target.value = '';
     }
 
-    // Вывод файлов
     function loadSavedFiles(teacherId) {
       const storeKey = `files_teacher_${teacherId}`;
       const saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
@@ -949,39 +1017,50 @@
       });
     }
 
-    // Полноэкранный просмотрщик без системных alert
+    // Просмотр файла
     function viewLessonFile(teacherId, idx) {
       const storeKey = `files_teacher_${teacherId}`;
       const saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
       const file = saved[idx];
-      if (!file) return;
+      if (!file || !file.dataUrl) {
+        alert('Сураныч, файлды өчүрүп, кайра жүктөңүз!');
+        return;
+      }
 
       const viewer = document.getElementById('fullViewerModal');
       const container = document.getElementById('viewerContent');
       document.getElementById('viewerFileName').innerText = file.name;
 
-      if (!file.dataUrl) {
-        // Если файл был загружен в старой версии без содержимого, просим перезагрузить
-        container.innerHTML = `
-          <div class="text-center text-white space-y-3">
-            <div class="text-5xl">⚠️</div>
-            <p class="text-xl font-bold">Бул файл эски форматта сакталган.</p>
-            <p class="text-slate-400">Сураныч, файлды өчүрүп, жаңы версияда кайра жүктөңүз.</p>
-          </div>
-        `;
-      } else if (file.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
-        container.innerHTML = `<img src="${file.dataUrl}" class="max-h-[84vh] max-w-full object-contain mx-auto rounded-xl shadow-2xl">`;
+      if (file.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
+        container.innerHTML = `<img src="${file.dataUrl}" class="max-h-[85vh] max-w-full object-contain mx-auto rounded-xl shadow-2xl">`;
       } else if (file.name.match(/\.pdf$/i)) {
-        container.innerHTML = `<iframe src="${file.dataUrl}" class="w-full h-[84vh] rounded-xl border-0 bg-white"></iframe>`;
+        container.innerHTML = `<iframe src="${file.dataUrl}" class="w-full h-[85vh] rounded-xl border-0 bg-white"></iframe>`;
       } else {
+        const arr = file.dataUrl.split(',');
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        const mime = mimeMatch ? mimeMatch[1] : 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        const blob = new Blob([u8arr], { type: mime });
+        const objectUrl = URL.createObjectURL(blob);
+
         container.innerHTML = `
-          <div class="text-center py-12 text-white space-y-5">
-            <div class="text-7xl">📊</div>
-            <h3 class="text-3xl font-black">${file.name}</h3>
-            <p class="text-slate-300 text-lg">Презентация сабакка даяр.</p>
-            <a href="${file.dataUrl}" download="${file.name}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-5 rounded-2xl text-2xl shadow-xl active:scale-95 transition-all">
-              PowerPoint / Экранда ачуу ↗
-            </a>
+          <div class="text-center py-10 text-white max-w-xl mx-auto space-y-6">
+            <div class="text-8xl">📊</div>
+            <h3 class="text-3xl font-black text-amber-300">${file.name}</h3>
+            <p class="text-slate-200 text-lg leading-relaxed">
+              Презентация даярдалды. Смарт-панелде орнотулган офистик программада (PowerPoint же WPS) ачуу үчүн төмөнкү баскычты басыңыз:
+            </p>
+            <div class="pt-2">
+              <a href="${objectUrl}" download="${file.name}" target="_blank" class="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-5 rounded-2xl text-2xl shadow-2xl active:scale-95 transition-all">
+                <span>🖥</span>
+                <span>PowerPoint'те ачуу</span>
+              </a>
+            </div>
           </div>
         `;
       }
@@ -1026,6 +1105,16 @@
     }
 
     function openAdminPanel() {
+      renderAdminRegistry();
+      document.getElementById('adminPanelModal').classList.remove('hidden');
+    }
+
+    function closeAdminPanel() {
+      document.getElementById('adminPanelModal').classList.add('hidden');
+    }
+
+    // Вывод таблицы админа
+    function renderAdminRegistry() {
       const tbody = document.getElementById('registryTableBody');
       tbody.innerHTML = '';
       teachersData.forEach((t, i) => {
@@ -1035,14 +1124,90 @@
           <td class="p-3 font-bold text-slate-800">${t.name}</td>
           <td class="p-3 text-slate-500">${t.email}</td>
           <td class="p-3 text-blue-600 font-mono font-bold text-base bg-blue-50/50">${t.password}</td>
+          <td class="p-3 text-right space-x-2">
+            <button onclick="editTeacher(${t.id})" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs">Оңдоо</button>
+            <button onclick="deleteTeacher(${t.id}, '${t.name}')" class="px-3 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold rounded-lg text-xs">Өчүрүү</button>
+          </td>
         `;
         tbody.appendChild(row);
       });
-      document.getElementById('adminPanelModal').classList.remove('hidden');
     }
 
-    function closeAdminPanel() {
-      document.getElementById('adminPanelModal').classList.add('hidden');
+    // Добавление и редактирование учителя
+    function openAddTeacherModal() {
+      document.getElementById('editTeacherId').value = '';
+      document.getElementById('teacherNameInput').value = '';
+      document.getElementById('teacherEmailInput').value = '';
+      generateAutoPassword();
+      document.getElementById('editModalTitle').innerText = currentLang === 'kg' ? 'Жаңы мугалим кошуу' : 'Добавить преподавателя';
+      document.getElementById('teacherEditModal').classList.remove('hidden');
+    }
+
+    function closeTeacherEditModal() {
+      document.getElementById('teacherEditModal').classList.add('hidden');
+    }
+
+    function generateAutoPassword() {
+      const words = ['Alatoo', 'Bilim', 'Ustoz', 'Sabak', 'Kadam', 'Akyl', 'Ordo', 'Birimdik'];
+      const syms = ['@', '#', '!', '$', '*'];
+      const word = words[Math.floor(Math.random() * words.length)];
+      const sym = syms[Math.floor(Math.random() * syms.length)];
+      const num = Math.floor(100 + Math.random() * 900);
+      document.getElementById('teacherPwdInput').value = `${word}${sym}${num}`;
+    }
+
+    function editTeacher(id) {
+      const t = teachersData.find(item => item.id === id);
+      if (!t) return;
+      document.getElementById('editTeacherId').value = t.id;
+      document.getElementById('teacherNameInput').value = t.name;
+      document.getElementById('teacherEmailInput').value = t.email;
+      document.getElementById('teacherPwdInput').value = t.password;
+      document.getElementById('editModalTitle').innerText = currentLang === 'kg' ? 'Мугалимдин маалыматын оңдоо' : 'Редактировать данные преподавателя';
+      document.getElementById('teacherEditModal').classList.remove('hidden');
+    }
+
+    function handleSaveTeacher(e) {
+      e.preventDefault();
+      const id = document.getElementById('editTeacherId').value;
+      const name = document.getElementById('teacherNameInput').value.trim();
+      const email = document.getElementById('teacherEmailInput').value.trim();
+      const password = document.getElementById('teacherPwdInput').value.trim();
+
+      if (id) {
+        // Редактирование
+        const idx = teachersData.findIndex(item => item.id == id);
+        if (idx !== -1) {
+          teachersData[idx] = { ...teachersData[idx], name, email, password };
+        }
+      } else {
+        // Добавление нового
+        const newId = teachersData.length > 0 ? Math.max(...teachersData.map(t => t.id)) + 1 : 1;
+        teachersData.push({ id: newId, name, email, password });
+      }
+
+      // Сохраняем в память браузера
+      localStorage.setItem('college_teachers_list', JSON.stringify(teachersData));
+      
+      closeTeacherEditModal();
+      renderAdminRegistry();
+      renderTeachers(teachersData);
+      buildAlphabet();
+      alert(currentLang === 'kg' ? 'Мугалим ийгиликтүү сакталды!' : 'Преподаватель успешно сохранён!');
+    }
+
+    function deleteTeacher(id, name) {
+      const confirmMsg = currentLang === 'kg' 
+        ? `«${name}» тизмеден өчүрүлсүнбү?` 
+        : `Удалить преподавателя «${name}» из системы?`;
+
+      if (confirm(confirmMsg)) {
+        teachersData = teachersData.filter(t => t.id !== id);
+        localStorage.setItem('college_teachers_list', JSON.stringify(teachersData));
+        renderAdminRegistry();
+        renderTeachers(teachersData);
+        buildAlphabet();
+      }
     }
 
     function copyAllPasswords() {
