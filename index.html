@@ -104,66 +104,35 @@
     <div id="fileList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
-  <!-- СЕНСОРНЫЙ ВВОД ПАРОЛЯ ПРЕПОДАВАТЕЛЯ (С ВЫБОРОМ ЦИФР И СЛОВ) -->
+  <!-- ПРОСТОЕ ОКНО ВВОДА ПАРОЛЯ (ДЛЯ СИСТЕМНОЙ КЛАВИАТУРЫ СМАРТ-ПАНЕЛИ) -->
   <div id="pwdModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-8 max-w-xl w-full shadow-2xl border border-slate-200 text-center">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
       <div class="w-16 h-16 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
         <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
       </div>
       <h3 id="pwdModalTeacherName" class="text-2xl font-black text-slate-800 mb-1">...</h3>
-      <p class="text-slate-500 text-sm mb-4" data-i18n="enterPwdHint">Өзүңүздүн сыр сөзүңүздү териңиз же клавиатураны колдонуңуз</p>
+      <p class="text-slate-500 text-sm mb-5" data-i18n="enterPwdHint">Паролду жазып, кирүү баскычын басыңыз</p>
 
-      <div class="relative mb-4">
-        <input type="password" id="pwdInput" readonly placeholder="••••••••" 
-          class="w-full text-3xl font-mono text-center tracking-widest py-3.5 px-12 bg-slate-100 rounded-2xl border-2 border-slate-300 focus:outline-none focus:border-blue-600">
-        <button onclick="togglePwdVisibility()" class="absolute right-4 top-4 text-slate-500 hover:text-slate-800">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-        </button>
-      </div>
+      <form onsubmit="handlePasswordSubmit(event)">
+        <!-- Активное поле ввода для вызова встроенной клавиатуры смарт-доски -->
+        <div class="relative mb-5">
+          <input type="password" id="pwdInput" required autocomplete="off" placeholder="••••••••" 
+            class="w-full text-2xl font-mono text-center tracking-wider py-4 px-12 bg-slate-50 rounded-2xl border-2 border-slate-300 focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900 shadow-inner">
+          <button type="button" onclick="togglePwdVisibility()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-700">
+            <svg id="eyeIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </button>
+        </div>
 
-      <!-- Сандык баскычтар -->
-      <div class="grid grid-cols-3 gap-2.5 mb-3">
-        <button onclick="pressKey('1')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">1</button>
-        <button onclick="pressKey('2')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">2</button>
-        <button onclick="pressKey('3')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">3</button>
-        <button onclick="pressKey('4')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">4</button>
-        <button onclick="pressKey('5')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">5</button>
-        <button onclick="pressKey('6')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">6</button>
-        <button onclick="pressKey('7')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">7</button>
-        <button onclick="pressKey('8')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">8</button>
-        <button onclick="pressKey('9')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">9</button>
-        <button onclick="pressKey('0')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">0</button>
-        <button onclick="pressKey('@')" class="h-14 text-2xl font-bold bg-amber-50 text-amber-700 active:bg-amber-600 active:text-white rounded-xl">@</button>
-        <button onclick="deleteKey()" class="h-14 text-xl font-bold bg-slate-200 active:bg-rose-500 active:text-white rounded-xl" data-i18n="backspaceBtn">⌫ Өчүрүү</button>
-      </div>
-
-      <!-- Слова-ключи для быстрого ввода -->
-      <div class="grid grid-cols-4 gap-2 mb-3">
-        <button onclick="pressWord('Alatoo')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Alatoo</button>
-        <button onclick="pressWord('Bilim')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Bilim</button>
-        <button onclick="pressWord('Ustoz')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Ustoz</button>
-        <button onclick="pressWord('Sabak')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Sabak</button>
-        <button onclick="pressWord('Kadam')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Kadam</button>
-        <button onclick="pressWord('Akyl')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Akyl</button>
-        <button onclick="pressWord('Ordo')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Ordo</button>
-        <button onclick="pressWord('Birimdik')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Birimdik</button>
-      </div>
-      <div class="flex justify-center gap-2 mb-4">
-        <button onclick="pressKey('#')" class="px-5 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">#</button>
-        <button onclick="pressKey('!')" class="px-5 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">!</button>
-        <button onclick="pressKey('$')" class="px-5 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">$</button>
-        <button onclick="pressKey('*')" class="px-5 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">*</button>
-      </div>
-
-      <div class="flex gap-3">
-        <button onclick="cancelPwdModal()" class="flex-1 py-3.5 bg-slate-200 hover:bg-slate-300 font-bold text-lg rounded-2xl" data-i18n="cancelBtn">Жокко чыгаруу</button>
-        <button onclick="submitPassword()" class="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xl rounded-2xl shadow-lg active:scale-95" data-i18n="openBtn">Ачуу (Кирүү)</button>
-      </div>
-      <p id="pwdError" class="text-rose-600 font-bold mt-3 hidden" data-i18n="pwdError">Ката сыр сөз! Сураныч, кайра териңиз.</p>
+        <div class="flex gap-3">
+          <button type="button" onclick="cancelPwdModal()" class="flex-1 py-4 bg-slate-200 hover:bg-slate-300 font-bold text-lg rounded-2xl text-slate-700 active:scale-95 transition-all" data-i18n="cancelBtn">Жокко чыгаруу</button>
+          <button type="submit" class="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-xl rounded-2xl shadow-lg active:scale-95 transition-all" data-i18n="openBtn">Ачуу (Кирүү)</button>
+        </div>
+      </form>
+      <p id="pwdError" class="text-rose-600 font-bold mt-4 hidden" data-i18n="pwdError">Ката сыр сөз! Сураныч, кайра териңиз.</p>
     </div>
   </div>
 
-  <!-- 1. МОДАЛКА ВХОДА В АДМИНКУ ПО ПАРОЛЮ -->
+  <!-- МОДАЛКА ВХОДА В АДМИНКУ ПО ПАРОЛЮ -->
   <div id="adminAuthModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
       <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -173,7 +142,7 @@
       <p class="text-slate-500 text-sm mb-5" data-i18n="adminLoginHint">Башкаруу панелине кирүү үчүн мастер-паролду жазыңыз</p>
 
       <form onsubmit="verifyAdminPass(event)" class="space-y-4">
-        <input type="password" id="adminMasterPassInput" placeholder="Мастер-пароль" 
+        <input type="password" id="adminMasterPassInput" placeholder="Мастер-пароль" required
           class="w-full text-center text-xl font-mono px-4 py-3.5 bg-slate-100 border border-slate-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200">
         <div class="flex gap-2">
           <button type="button" onclick="closeAdminAuthModal()" class="flex-1 py-3.5 bg-slate-200 font-bold rounded-xl" data-i18n="cancelBtn">Жокко чыгаруу</button>
@@ -184,7 +153,7 @@
     </div>
   </div>
 
-  <!-- 2. ПОЛНОЦЕННЫЙ КАБИНЕТ АДМИНИСТРАТОРА (ОТКРЫВАЕТСЯ ТОЛЬКО ПОСЛЕ ВВОДА ПАРОЛЯ) -->
+  <!-- ПОЛНОЦЕННЫЙ КАБИНЕТ АДМИНИСТРАТОРА -->
   <div id="adminPanelModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-6">
     <div class="bg-white rounded-3xl p-8 max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl">
       <div class="flex items-center justify-between pb-4 border-b">
@@ -221,7 +190,6 @@
   </div>
 
   <script>
-    // 78 колледж мугалими базасы
     const teachersData = [
   {
     "id": 1,
@@ -693,10 +661,8 @@
   }
 ];
 
-    // Мастер-пароль администратора
     const MASTER_ADMIN_PASS = "admin2026";
 
-    // СЛОВАРЬ (КЫРГЫЗЧА / РУССКИЙ)
     const translations = {
       kg: {
         appTitle: "Окуу материалдары порталы",
@@ -713,8 +679,7 @@
         uploadHint: "Бул сабак үчүн файлдар браузердин эсине коопсуз сакталат",
         noFiles: "Бул папкада азырынча файл жок. Жогорудагы баскычты басып презентация жүктөңүз.",
         openInLesson: "Сабакта ачуу",
-        enterPwdHint: "Өзүңүздүн сыр сөзүңүздү териңиз же клавиатураны колдонуңуз",
-        backspaceBtn: "⌫ Өчүрүү",
+        enterPwdHint: "Паролду жазып, кирүү баскычын басыңыз",
         cancelBtn: "Жокко чыгаруу",
         openBtn: "Ачуу (Кирүү)",
         pwdError: "Ката сыр сөз! Сураныч, кайра териңиз.",
@@ -746,8 +711,7 @@
         uploadHint: "Файлы для урока безопасно сохраняются в памяти устройства",
         noFiles: "В этой папке пока нет файлов. Нажмите кнопку выше для загрузки презентации.",
         openInLesson: "Открыть на уроке",
-        enterPwdHint: "Введите свой пароль пальцем или стилусом на экране",
-        backspaceBtn: "⌫ Стереть",
+        enterPwdHint: "Введите пароль и нажмите войти",
         cancelBtn: "Отмена",
         openBtn: "Открыть папку",
         pwdError: "Неверный пароль! Пожалуйста, повторите ввод.",
@@ -768,10 +732,8 @@
 
     let currentLang = 'kg';
     let currentTeacher = null;
-    let typedPassword = '';
     let isPwdVisible = false;
 
-    // Смена языка интерфейса
     function setLanguage(lang) {
       currentLang = lang;
       document.getElementById('langBtnKG').className = lang === 'kg' 
@@ -796,12 +758,10 @@
       }
     }
 
-    // Часы
     setInterval(() => {
       document.getElementById('clock').innerText = new Date().toLocaleTimeString('ru-RU');
     }, 1000);
 
-    // Карточки учителей
     function renderTeachers(list) {
       const grid = document.getElementById('teachersGrid');
       grid.innerHTML = '';
@@ -831,7 +791,6 @@
       });
     }
 
-    // Алфавит
     function buildAlphabet() {
       const letters = [...new Set(teachersData.map(t => t.name[0].toUpperCase()))].sort();
       const container = document.getElementById('alphabetList');
@@ -850,42 +809,29 @@
       });
     }
 
-    // Поиск
     document.getElementById('searchInput').addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
       const filtered = teachersData.filter(t => t.name.toLowerCase().includes(q));
       renderTeachers(filtered);
     });
 
-    // Пароль учителя
+    // Модальное окно пароля учителя
     function openPwdModal(teacher) {
       currentTeacher = teacher;
-      typedPassword = '';
-      updatePwdDisplay();
+      const inp = document.getElementById('pwdInput');
+      inp.value = '';
       document.getElementById('pwdError').classList.add('hidden');
       document.getElementById('pwdModalTeacherName').innerText = teacher.name;
       document.getElementById('pwdModal').classList.remove('hidden');
+      
+      // Фокус для немедленного вызова экранной клавиатуры панели
+      setTimeout(() => inp.focus(), 150);
     }
 
     function cancelPwdModal() {
       document.getElementById('pwdModal').classList.add('hidden');
       currentTeacher = null;
-      typedPassword = '';
-    }
-
-    function pressKey(char) {
-      typedPassword += char;
-      updatePwdDisplay();
-    }
-
-    function pressWord(word) {
-      typedPassword += word;
-      updatePwdDisplay();
-    }
-
-    function deleteKey() {
-      typedPassword = typedPassword.slice(0, -1);
-      updatePwdDisplay();
+      document.getElementById('pwdInput').value = '';
     }
 
     function togglePwdVisibility() {
@@ -893,25 +839,23 @@
       document.getElementById('pwdInput').type = isPwdVisible ? 'text' : 'password';
     }
 
-    function updatePwdDisplay() {
-      document.getElementById('pwdInput').value = typedPassword;
-    }
-
-    function submitPassword() {
+    function handlePasswordSubmit(e) {
+      e.preventDefault();
       if (!currentTeacher) return;
-      if (typedPassword === currentTeacher.password) {
+      const val = document.getElementById('pwdInput').value.trim();
+
+      if (val === currentTeacher.password) {
         document.getElementById('pwdModal').classList.add('hidden');
         showFolder(currentTeacher);
       } else {
         const err = document.getElementById('pwdError');
         err.innerText = translations[currentLang].pwdError;
         err.classList.remove('hidden');
-        typedPassword = '';
-        updatePwdDisplay();
+        document.getElementById('pwdInput').value = '';
+        document.getElementById('pwdInput').focus();
       }
     }
 
-    // Папка учителя
     function showFolder(teacher) {
       document.getElementById('mainGridSection').classList.add('hidden');
       document.getElementById('folderView').classList.remove('hidden');
@@ -924,10 +868,8 @@
       document.getElementById('folderView').classList.add('hidden');
       document.getElementById('mainGridSection').classList.remove('hidden');
       currentTeacher = null;
-      typedPassword = '';
     }
 
-    // Локальное хранение файлов
     function uploadLocalFile(event) {
       const files = event.target.files;
       if (!files.length || !currentTeacher) return;
@@ -985,7 +927,7 @@
       loadSavedFiles(teacherId);
     }
 
-    // АДМИН-АВТОРИЗАЦИЯ
+    // Авторизация администратора
     function openAdminAuthModal() {
       document.getElementById('adminMasterPassInput').value = '';
       document.getElementById('adminAuthError').classList.add('hidden');
@@ -1050,7 +992,6 @@
       document.body.removeChild(link);
     }
 
-    // Баштапкы ишке киргизүү
     setLanguage('kg');
   </script>
 </body>
