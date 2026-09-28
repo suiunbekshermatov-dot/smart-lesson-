@@ -3,65 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Колледж смарт-панели — Мугалимдердин папкалары</title>
+  <title>Колледж смарт-панели / Портал материалов</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     button { touch-action: manipulation; user-select: none; }
     ::-webkit-scrollbar { width: 10px; height: 10px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans select-none">
 
-  <!-- ЖОГОРКУ ПАНЕЛЬ (75" чоң экран үчүн) -->
+  <!-- ЖОГОРКУ ШАПКА / ВЕРХНЯЯ ШАПКА -->
   <header class="bg-blue-950 text-white px-8 py-5 flex items-center justify-between shadow-lg sticky top-0 z-40">
     <div class="flex items-center gap-5">
       <div class="bg-blue-600 p-3.5 rounded-2xl shadow-inner">
         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
       </div>
       <div>
-        <h1 class="text-3xl font-black tracking-wide uppercase">Окуу материалдары порталы</h1>
-        <p class="text-blue-200 text-base">Интерактивдүү смарт-панель (75") үчүн электрондук каталог</p>
+        <h1 class="text-3xl font-black tracking-wide uppercase" data-i18n="appTitle">Окуу материалдары порталы</h1>
+        <p class="text-blue-200 text-base" data-i18n="appSubtitle">Интерактивдүү смарт-панель (75") үчүн электрондук каталог</p>
       </div>
     </div>
 
-    <div class="flex items-center gap-6">
-      <div id="clock" class="text-3xl font-mono font-black bg-blue-900/90 px-6 py-2.5 rounded-2xl border border-blue-700 text-amber-300 shadow-inner">
+    <div class="flex items-center gap-5">
+      <!-- ТИЛ АЛМАШТЫРУУ / ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА -->
+      <div class="bg-blue-900/80 p-1.5 rounded-2xl border border-blue-700 flex gap-1">
+        <button onclick="setLanguage('kg')" id="langBtnKG" class="px-4 py-2 rounded-xl font-black text-sm transition-all bg-amber-400 text-slate-950 shadow">KG</button>
+        <button onclick="setLanguage('ru')" id="langBtnRU" class="px-4 py-2 rounded-xl font-black text-sm transition-all text-blue-200 hover:text-white">RU</button>
+      </div>
+
+      <!-- ЧАСЫ БИШКЕКА -->
+      <div id="clock" class="text-3xl font-mono font-black bg-blue-900/90 px-5 py-2 rounded-2xl border border-blue-700 text-amber-300 shadow-inner">
         00:00:00
       </div>
       
-      <!-- Поиск мугалима -->
-      <div class="relative w-80">
+      <!-- ПОИСК -->
+      <div class="relative w-72">
         <input type="text" id="searchInput" placeholder="Мугалимди издөө..." 
-          class="w-full text-xl px-5 py-3 pl-12 rounded-2xl text-slate-900 bg-white shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-400 font-medium">
-        <svg class="w-6 h-6 text-slate-400 absolute left-4 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          class="w-full text-lg px-4 py-3 pl-11 rounded-2xl text-slate-900 bg-white shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-400 font-medium">
+        <svg class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
 
-      <!-- Баскыч: Реестр паролей (Админ үчүн) -->
-      <button onclick="toggleRegistryModal(true)" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-5 py-3 rounded-2xl text-lg flex items-center gap-2 shadow-md active:scale-95 transition-all">
-        📋 Паролдор тизмеси
+      <!-- АДМИН КАБИНЕТ (С ПАРОЛЕМ) -->
+      <button onclick="openAdminAuthModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-5 py-3 rounded-2xl text-base flex items-center gap-2 shadow-md active:scale-95 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        <span data-i18n="adminBtn">Админ кабинет</span>
       </button>
     </div>
   </header>
 
-  <!-- АЛФАВИТТИК ЛЕНТА (Тез өтүү үчүн) -->
+  <!-- АЛФАВИТТИК ТИЛКЕ / АЛФАВИТНАЯ ЛЕНТА -->
   <div class="bg-white border-b border-slate-200 px-8 py-3 flex items-center justify-between overflow-x-auto shadow-sm">
-    <span class="text-sm font-bold text-slate-400 uppercase tracking-wider mr-4">Алфавит:</span>
+    <span class="text-sm font-bold text-slate-400 uppercase tracking-wider mr-4" data-i18n="alphabetLabel">Алфавит:</span>
     <div id="alphabetList" class="flex gap-2"></div>
   </div>
 
-  <!-- НЕГИЗГИ ТИЗМЕ (78 Мугалимдин папкалары) -->
+  <!-- НЕГИЗГИ ТИЗМЕ / ГЛАВНАЯ ВИТРИНА -->
   <main id="mainGridSection" class="flex-1 p-8 max-w-7xl mx-auto w-full">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-black text-slate-700">Бардык мугалимдер: <span id="teacherCount" class="text-blue-600 font-extrabold">0</span></h2>
-      <p class="text-slate-400 text-sm">Папканы ачуу үчүн өзүңүздүн ысымыңызды басыңыз</p>
+      <h2 class="text-2xl font-black text-slate-700">
+        <span data-i18n="totalTeachers">Бардык мугалимдер:</span> 
+        <span id="teacherCount" class="text-blue-600 font-extrabold ml-1">0</span>
+      </h2>
+      <p class="text-slate-400 text-sm" data-i18n="clickHint">Папканы ачуу үчүн өзүңүздүн ысымыңызды басыңыз</p>
     </div>
     <div id="teachersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
   </main>
 
-  <!-- АЧЫЛГАН ПАПКА (ПРЕЗЕНТАЦИЯЛАР ЖАНА САБАК) -->
+  <!-- АЧЫЛГАН ПАПКА / ПАПКА ПРЕПОДАВАТЕЛЯ -->
   <section id="folderView" class="hidden flex-1 p-8 flex flex-col max-w-7xl mx-auto w-full">
     <div class="bg-white p-6 rounded-3xl shadow-lg border border-slate-200 flex items-center justify-between mb-6">
       <div class="flex items-center gap-5">
@@ -74,97 +84,119 @@
         </div>
       </div>
       
-      <!-- Чыгуу баскычы -->
+      <!-- ЧЫГУУ БАСКЫЧЫ -->
       <button onclick="closeFolder()" class="bg-rose-600 hover:bg-rose-700 text-white px-8 py-4 rounded-2xl text-2xl font-black flex items-center gap-3 shadow-lg active:scale-95 transition-all">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-        Папканы жабуу жана чыгуу
+        <span data-i18n="closeFolderBtn">Папканы жабуу жана чыгуу</span>
       </button>
     </div>
 
-    <!-- Презентация кошуу баскычы -->
+    <!-- Загрузка файла -->
     <div class="bg-blue-50 border-2 border-dashed border-blue-300 rounded-3xl p-6 text-center mb-6">
       <input type="file" id="fileInput" class="hidden" multiple onchange="uploadLocalFile(event)">
       <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl text-2xl font-black shadow-md inline-flex items-center gap-3 active:scale-95">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"></path></svg>
-        Жаңы презентация жүктөө (.pptx, .pdf)
+        <span data-i18n="uploadBtn">Жаңы презентация жүктөө (.pptx, .pdf)</span>
       </button>
-      <p class="text-slate-500 mt-2 text-base">Бул сабак үчүн файлдар браузердин эсине коопсуз сакталат</p>
+      <p class="text-slate-500 mt-2 text-base" data-i18n="uploadHint">Бул сабак үчүн файлдар браузердин эсине коопсуз сакталат</p>
     </div>
 
-    <!-- Файлдардын тизмеси -->
     <div id="fileList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
-  <!-- СЕНСОРДУК ПАРОЛЬ ТЕРҮҮ МОДАЛДЫК ТЕРЕЗЕСИ (75" ДОСКА ҮЧҮН ТОЛУК КЛАВИАТУРА) -->
+  <!-- СЕНСОРНЫЙ ВВОД ПАРОЛЯ ПРЕПОДАВАТЕЛЯ (С ВЫБОРОМ ЦИФР И СЛОВ) -->
   <div id="pwdModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-xl w-full shadow-2xl border border-slate-200 text-center">
       <div class="w-16 h-16 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
         <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
       </div>
       <h3 id="pwdModalTeacherName" class="text-2xl font-black text-slate-800 mb-1">...</h3>
-      <p class="text-slate-500 text-sm mb-4">Өзүңүздүн сыр сөзүңүздү териңиз же клавиатураны колдонуңуз</p>
+      <p class="text-slate-500 text-sm mb-4" data-i18n="enterPwdHint">Өзүңүздүн сыр сөзүңүздү териңиз же клавиатураны колдонуңуз</p>
 
-      <!-- Инпут талаасы + көз баскычы -->
       <div class="relative mb-4">
-        <input type="password" id="pwdInput" readonly placeholder="Паролду басыңыз" 
+        <input type="password" id="pwdInput" readonly placeholder="••••••••" 
           class="w-full text-3xl font-mono text-center tracking-widest py-3.5 px-12 bg-slate-100 rounded-2xl border-2 border-slate-300 focus:outline-none focus:border-blue-600">
         <button onclick="togglePwdVisibility()" class="absolute right-4 top-4 text-slate-500 hover:text-slate-800">
-          <svg id="eyeIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
         </button>
       </div>
 
-      <!-- Сенсордук сандык клавиатура (0-9 жана символдор) -->
+      <!-- Сандык баскычтар -->
       <div class="grid grid-cols-3 gap-2.5 mb-3">
-        <button onclick="pressKey('1')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">1</button>
-        <button onclick="pressKey('2')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">2</button>
-        <button onclick="pressKey('3')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">3</button>
-        <button onclick="pressKey('4')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">4</button>
-        <button onclick="pressKey('5')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">5</button>
-        <button onclick="pressKey('6')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">6</button>
-        <button onclick="pressKey('7')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">7</button>
-        <button onclick="pressKey('8')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">8</button>
-        <button onclick="pressKey('9')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">9</button>
-        <button onclick="pressKey('0')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">0</button>
-        <button onclick="pressKey('@')" class="h-16 text-2xl font-bold bg-amber-50 text-amber-700 active:bg-amber-600 active:text-white rounded-xl">@</button>
-        <button onclick="deleteKey()" class="h-16 text-2xl font-bold bg-slate-200 active:bg-rose-500 active:text-white rounded-xl">⌫ Өчүрүү</button>
+        <button onclick="pressKey('1')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">1</button>
+        <button onclick="pressKey('2')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">2</button>
+        <button onclick="pressKey('3')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">3</button>
+        <button onclick="pressKey('4')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">4</button>
+        <button onclick="pressKey('5')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">5</button>
+        <button onclick="pressKey('6')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">6</button>
+        <button onclick="pressKey('7')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">7</button>
+        <button onclick="pressKey('8')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">8</button>
+        <button onclick="pressKey('9')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">9</button>
+        <button onclick="pressKey('0')" class="h-14 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">0</button>
+        <button onclick="pressKey('@')" class="h-14 text-2xl font-bold bg-amber-50 text-amber-700 active:bg-amber-600 active:text-white rounded-xl">@</button>
+        <button onclick="deleteKey()" class="h-14 text-xl font-bold bg-slate-200 active:bg-rose-500 active:text-white rounded-xl" data-i18n="backspaceBtn">⌫ Өчүрүү</button>
       </div>
 
-      <!-- Сөздөрдү тез басуу блоку (Паролдордо колдонулган ачкыч сөздөр) -->
-      <div class="grid grid-cols-4 gap-2 mb-4">
-        <button onclick="pressWord('Alatoo')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Alatoo</button>
-        <button onclick="pressWord('Bilim')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Bilim</button>
-        <button onclick="pressWord('Ustoz')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Ustoz</button>
-        <button onclick="pressWord('Sabak')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Sabak</button>
-        <button onclick="pressWord('Kadam')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Kadam</button>
-        <button onclick="pressWord('Akyl')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Akyl</button>
-        <button onclick="pressWord('Ordo')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Ordo</button>
-        <button onclick="pressWord('Birimdik')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Birimdik</button>
+      <!-- Слова-ключи для быстрого ввода -->
+      <div class="grid grid-cols-4 gap-2 mb-3">
+        <button onclick="pressWord('Alatoo')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Alatoo</button>
+        <button onclick="pressWord('Bilim')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Bilim</button>
+        <button onclick="pressWord('Ustoz')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Ustoz</button>
+        <button onclick="pressWord('Sabak')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Sabak</button>
+        <button onclick="pressWord('Kadam')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Kadam</button>
+        <button onclick="pressWord('Akyl')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Akyl</button>
+        <button onclick="pressWord('Ordo')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Ordo</button>
+        <button onclick="pressWord('Birimdik')" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Birimdik</button>
       </div>
       <div class="flex justify-center gap-2 mb-4">
-        <button onclick="pressKey('#')" class="px-5 py-2 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">#</button>
-        <button onclick="pressKey('!')" class="px-5 py-2 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">!</button>
-        <button onclick="pressKey('$')" class="px-5 py-2 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">$</button>
-        <button onclick="pressKey('*')" class="px-5 py-2 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">*</button>
+        <button onclick="pressKey('#')" class="px-5 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">#</button>
+        <button onclick="pressKey('!')" class="px-5 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">!</button>
+        <button onclick="pressKey('$')" class="px-5 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">$</button>
+        <button onclick="pressKey('*')" class="px-5 py-1.5 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">*</button>
       </div>
 
-      <!-- Кирүү жана Жокко чыгаруу баскычтары -->
       <div class="flex gap-3">
-        <button onclick="cancelPwdModal()" class="flex-1 py-4 bg-slate-200 hover:bg-slate-300 font-bold text-lg rounded-2xl">Жокко чыгаруу</button>
-        <button onclick="submitPassword()" class="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-xl rounded-2xl shadow-lg active:scale-95">Ачуу (Кирүү)</button>
+        <button onclick="cancelPwdModal()" class="flex-1 py-3.5 bg-slate-200 hover:bg-slate-300 font-bold text-lg rounded-2xl" data-i18n="cancelBtn">Жокко чыгаруу</button>
+        <button onclick="submitPassword()" class="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xl rounded-2xl shadow-lg active:scale-95" data-i18n="openBtn">Ачуу (Кирүү)</button>
       </div>
-      <p id="pwdError" class="text-rose-600 font-bold mt-3 hidden"></p>
+      <p id="pwdError" class="text-rose-600 font-bold mt-3 hidden" data-i18n="pwdError">Ката сыр сөз! Сураныч, кайра териңиз.</p>
     </div>
   </div>
 
-  <!-- РЕЕСТР / ЭКСПОРТ МОДАЛДЫК ТЕРЕЗЕСИ (Админ үчүн бардык сыр сөздөр) -->
-  <div id="registryModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-6">
-    <div class="bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+  <!-- 1. МОДАЛКА ВХОДА В АДМИНКУ ПО ПАРОЛЮ -->
+  <div id="adminAuthModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
+      <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+      </div>
+      <h3 class="text-2xl font-black text-slate-900 mb-1" data-i18n="adminLoginTitle">Администратордун сыр сөзү</h3>
+      <p class="text-slate-500 text-sm mb-5" data-i18n="adminLoginHint">Башкаруу панелине кирүү үчүн мастер-паролду жазыңыз</p>
+
+      <form onsubmit="verifyAdminPass(event)" class="space-y-4">
+        <input type="password" id="adminMasterPassInput" placeholder="Мастер-пароль" 
+          class="w-full text-center text-xl font-mono px-4 py-3.5 bg-slate-100 border border-slate-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200">
+        <div class="flex gap-2">
+          <button type="button" onclick="closeAdminAuthModal()" class="flex-1 py-3.5 bg-slate-200 font-bold rounded-xl" data-i18n="cancelBtn">Жокко чыгаруу</button>
+          <button type="submit" class="flex-1 py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black rounded-xl shadow" data-i18n="loginBtn">Кирүү</button>
+        </div>
+      </form>
+      <p id="adminAuthError" class="text-rose-600 font-bold mt-3 text-sm hidden" data-i18n="adminAuthErrorMsg">Мастер-пароль туура эмес!</p>
+    </div>
+  </div>
+
+  <!-- 2. ПОЛНОЦЕННЫЙ КАБИНЕТ АДМИНИСТРАТОРА (ОТКРЫВАЕТСЯ ТОЛЬКО ПОСЛЕ ВВОДА ПАРОЛЯ) -->
+  <div id="adminPanelModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-6">
+    <div class="bg-white rounded-3xl p-8 max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl">
       <div class="flex items-center justify-between pb-4 border-b">
         <div>
-          <h3 class="text-2xl font-black text-slate-900">Мугалимдердин сыр сөздөр ведомосту (78 адам)</h3>
-          <p class="text-slate-500 text-sm">Бул тизмени басып чыгарып же Excel түрүндө сактап алсаңыз болот</p>
+          <h3 class="text-2xl font-black text-slate-900" data-i18n="adminPanelTitle">Мугалимдерди жана сыр сөздөрдү башкаруу</h3>
+          <p class="text-slate-500 text-sm" data-i18n="adminPanelSubtitle">Жалпы 78 мугалимдин маалыматы жана сыр сөздөрү</p>
         </div>
-        <button onclick="toggleRegistryModal(false)" class="text-slate-400 hover:text-slate-700 text-3xl font-bold">&times;</button>
+        <div class="flex items-center gap-3">
+          <button onclick="exportCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm shadow">📥 Excel (CSV)</button>
+          <button onclick="copyAllPasswords()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-sm" data-i18n="copyBtn">Көчүрүп алуу</button>
+          <button onclick="closeAdminPanel()" class="text-slate-400 hover:text-slate-700 text-3xl font-bold ml-2">&times;</button>
+        </div>
       </div>
 
       <div class="flex-1 overflow-y-auto my-4 border rounded-2xl">
@@ -172,18 +204,18 @@
           <thead class="bg-slate-100 text-slate-700 text-sm font-bold sticky top-0">
             <tr>
               <th class="p-3 border-b">№</th>
-              <th class="p-3 border-b">Мугалимдин аты-жөнү</th>
-              <th class="p-3 border-b">Почтасы</th>
-              <th class="p-3 border-b text-blue-600 font-mono">Сыр сөз (Пароль)</th>
+              <th class="p-3 border-b" data-i18n="thName">Мугалимдин аты-жөнү</th>
+              <th class="p-3 border-b" data-i18n="thEmail">Почтасы</th>
+              <th class="p-3 border-b text-blue-700 font-mono" data-i18n="thPassword">Сыр сөз (Пароль)</th>
             </tr>
           </thead>
           <tbody id="registryTableBody" class="text-sm divide-y"></tbody>
         </table>
       </div>
 
-      <div class="flex justify-end gap-3 pt-2">
-        <button onclick="copyAllPasswords()" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-base">Көчүрүп алуу (Copy)</button>
-        <button onclick="toggleRegistryModal(false)" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-base">Жабуу</button>
+      <div class="flex justify-between items-center pt-2">
+        <span class="text-xs text-slate-400" data-i18n="adminNote">Эскертүү: Паролдор купуя сакталышы керек</span>
+        <button onclick="closeAdminPanel()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl" data-i18n="closeModalBtn">Жабуу</button>
       </div>
     </div>
   </div>
@@ -661,16 +693,115 @@
   }
 ];
 
+    // Мастер-пароль администратора
+    const MASTER_ADMIN_PASS = "admin2026";
+
+    // СЛОВАРЬ (КЫРГЫЗЧА / РУССКИЙ)
+    const translations = {
+      kg: {
+        appTitle: "Окуу материалдары порталы",
+        appSubtitle: "Интерактивдүү смарт-панель (75\") үчүн электрондук каталог",
+        searchPlaceholder: "Мугалимди издөө...",
+        adminBtn: "Админ кабинет",
+        alphabetLabel: "Алфавит:",
+        allAlphabet: "Баары",
+        totalTeachers: "Бардык мугалимдер:",
+        clickHint: "Папканы ачуу үчүн өзүңүздүн ысымыңызды басыңыз",
+        teacherRole: "Окутуучу",
+        closeFolderBtn: "Папканы жабуу жана чыгуу",
+        uploadBtn: "Жаңы презентация жүктөө (.pptx, .pdf)",
+        uploadHint: "Бул сабак үчүн файлдар браузердин эсине коопсуз сакталат",
+        noFiles: "Бул папкада азырынча файл жок. Жогорудагы баскычты басып презентация жүктөңүз.",
+        openInLesson: "Сабакта ачуу",
+        enterPwdHint: "Өзүңүздүн сыр сөзүңүздү териңиз же клавиатураны колдонуңуз",
+        backspaceBtn: "⌫ Өчүрүү",
+        cancelBtn: "Жокко чыгаруу",
+        openBtn: "Ачуу (Кирүү)",
+        pwdError: "Ката сыр сөз! Сураныч, кайра териңиз.",
+        adminLoginTitle: "Администратордун сыр сөзү",
+        adminLoginHint: "Башкаруу панелине кирүү үчүн мастер-паролду жазыңыз",
+        loginBtn: "Кирүү",
+        adminAuthErrorMsg: "Мастер-пароль туура эмес!",
+        adminPanelTitle: "Мугалимдерди жана сыр сөздөрдү башкаруу",
+        adminPanelSubtitle: "Жалпы 78 мугалимдин маалыматы жана сыр сөздөрү",
+        copyBtn: "Көчүрүп алуу",
+        thName: "Мугалимдин аты-жөнү",
+        thEmail: "Почтасы",
+        thPassword: "Сыр сөз (Пароль)",
+        adminNote: "Эскертүү: Паролдор купуя сакталышы керек",
+        closeModalBtn: "Жабуу"
+      },
+      ru: {
+        appTitle: "Портал учебных материалов",
+        appSubtitle: "Электронный каталог для смарт-панели (75\") в аудиториях",
+        searchPlaceholder: "Поиск преподавателя...",
+        adminBtn: "Админ-кабинет",
+        alphabetLabel: "Алфавит:",
+        allAlphabet: "Все",
+        totalTeachers: "Всего преподавателей:",
+        clickHint: "Нажмите на свое имя, чтобы открыть папку",
+        teacherRole: "Преподаватель",
+        closeFolderBtn: "Закрыть папку и выйти",
+        uploadBtn: "Загрузить презентацию (.pptx, .pdf)",
+        uploadHint: "Файлы для урока безопасно сохраняются в памяти устройства",
+        noFiles: "В этой папке пока нет файлов. Нажмите кнопку выше для загрузки презентации.",
+        openInLesson: "Открыть на уроке",
+        enterPwdHint: "Введите свой пароль пальцем или стилусом на экране",
+        backspaceBtn: "⌫ Стереть",
+        cancelBtn: "Отмена",
+        openBtn: "Открыть папку",
+        pwdError: "Неверный пароль! Пожалуйста, повторите ввод.",
+        adminLoginTitle: "Пароль администратора",
+        adminLoginHint: "Введите мастер-пароль для входа в панель управления",
+        loginBtn: "Войти",
+        adminAuthErrorMsg: "Неверный мастер-пароль!",
+        adminPanelTitle: "Управление преподавателями и паролями",
+        adminPanelSubtitle: "Реестр всех 78 преподавателей с паролями и почтами",
+        copyBtn: "Копировать всё",
+        thName: "ФИО Преподавателя",
+        thEmail: "Почта (Email)",
+        thPassword: "Секретный пароль",
+        adminNote: "Внимание: пароли строго конфиденциальны",
+        closeModalBtn: "Закрыть"
+      }
+    };
+
+    let currentLang = 'kg';
     let currentTeacher = null;
     let typedPassword = '';
     let isPwdVisible = false;
 
-    // Бишкек убактысы
+    // Смена языка интерфейса
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.getElementById('langBtnKG').className = lang === 'kg' 
+        ? "px-4 py-2 rounded-xl font-black text-sm transition-all bg-amber-400 text-slate-950 shadow" 
+        : "px-4 py-2 rounded-xl font-black text-sm transition-all text-blue-200 hover:text-white";
+      document.getElementById('langBtnRU').className = lang === 'ru' 
+        ? "px-4 py-2 rounded-xl font-black text-sm transition-all bg-amber-400 text-slate-950 shadow" 
+        : "px-4 py-2 rounded-xl font-black text-sm transition-all text-blue-200 hover:text-white";
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+
+      document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
+      buildAlphabet();
+      renderTeachers(teachersData);
+      if (currentTeacher) {
+        loadSavedFiles(currentTeacher.id);
+      }
+    }
+
+    // Часы
     setInterval(() => {
       document.getElementById('clock').innerText = new Date().toLocaleTimeString('ru-RU');
     }, 1000);
 
-    // Карточкаларды чыгаруу
+    // Карточки учителей
     function renderTeachers(list) {
       const grid = document.getElementById('teachersGrid');
       grid.innerHTML = '';
@@ -689,7 +820,7 @@
             </div>
             <div>
               <h4 class="text-2xl font-bold text-slate-900 leading-tight">${t.name}</h4>
-              <p class="text-slate-400 text-sm mt-1">Окутуучу</p>
+              <p class="text-slate-400 text-sm mt-1">${translations[currentLang].teacherRole}</p>
             </div>
           </div>
           <div class="text-slate-300">
@@ -700,12 +831,12 @@
       });
     }
 
-    // Алфавиттик тилке
+    // Алфавит
     function buildAlphabet() {
       const letters = [...new Set(teachersData.map(t => t.name[0].toUpperCase()))].sort();
       const container = document.getElementById('alphabetList');
       container.innerHTML = `
-        <button onclick="renderTeachers(teachersData)" class="px-3.5 py-1.5 bg-blue-600 text-white font-bold rounded-xl text-sm">Баары</button>
+        <button onclick="renderTeachers(teachersData)" class="px-3.5 py-1.5 bg-blue-600 text-white font-bold rounded-xl text-sm">${translations[currentLang].allAlphabet}</button>
       `;
       letters.forEach(letter => {
         const btn = document.createElement('button');
@@ -719,14 +850,14 @@
       });
     }
 
-    // Издөө
+    // Поиск
     document.getElementById('searchInput').addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
       const filtered = teachersData.filter(t => t.name.toLowerCase().includes(q));
       renderTeachers(filtered);
     });
 
-    // Пароль модалкасы
+    // Пароль учителя
     function openPwdModal(teacher) {
       currentTeacher = teacher;
       typedPassword = '';
@@ -759,8 +890,7 @@
 
     function togglePwdVisibility() {
       isPwdVisible = !isPwdVisible;
-      const inp = document.getElementById('pwdInput');
-      inp.type = isPwdVisible ? 'text' : 'password';
+      document.getElementById('pwdInput').type = isPwdVisible ? 'text' : 'password';
     }
 
     function updatePwdDisplay() {
@@ -774,14 +904,14 @@
         showFolder(currentTeacher);
       } else {
         const err = document.getElementById('pwdError');
-        err.innerText = 'Ката сыр сөз! Сураныч, кайра териңиз.';
+        err.innerText = translations[currentLang].pwdError;
         err.classList.remove('hidden');
         typedPassword = '';
         updatePwdDisplay();
       }
     }
 
-    // Мугалимдин папкасын ачуу
+    // Папка учителя
     function showFolder(teacher) {
       document.getElementById('mainGridSection').classList.add('hidden');
       document.getElementById('folderView').classList.remove('hidden');
@@ -797,7 +927,7 @@
       typedPassword = '';
     }
 
-    // Локалдык файл жүктөө (IndexedDB / LocalStorage сыноо үчүн)
+    // Локальное хранение файлов
     function uploadLocalFile(event) {
       const files = event.target.files;
       if (!files.length || !currentTeacher) return;
@@ -825,7 +955,7 @@
       list.innerHTML = '';
 
       if (saved.length === 0) {
-        list.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 text-2xl font-bold">Бул папкада азырынча файл жок. Жогорудагы баскычты басып презентация жүктөңүз.</div>`;
+        list.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 text-2xl font-bold">${translations[currentLang].noFiles}</div>`;
         return;
       }
 
@@ -839,7 +969,7 @@
             <p class="text-slate-400 text-sm">${f.size} • ${f.date}</p>
           </div>
           <div class="mt-6 flex gap-3">
-            <button onclick="alert('Сабакта экранга чыгаруу режими сыноодон өтүп жатат!')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold">Сабакта ачуу</button>
+            <button onclick="alert('${translations[currentLang].openInLesson}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold">${translations[currentLang].openInLesson}</button>
             <button onclick="deleteSavedFile(${teacherId}, ${idx})" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-4 py-3.5 rounded-xl font-bold">🗑</button>
           </div>
         `;
@@ -855,38 +985,73 @@
       loadSavedFiles(teacherId);
     }
 
-    // Реестр паролей
-    function toggleRegistryModal(show) {
-      const modal = document.getElementById('registryModal');
-      if (show) {
-        const tbody = document.getElementById('registryTableBody');
-        tbody.innerHTML = '';
-        teachersData.forEach((t, i) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td class="p-3 text-slate-400 font-bold">${i + 1}</td>
-            <td class="p-3 font-bold text-slate-800">${t.name}</td>
-            <td class="p-3 text-slate-500">${t.email}</td>
-            <td class="p-3 text-blue-600 font-mono font-bold text-base bg-blue-50/50">${t.password}</td>
-          `;
-          tbody.appendChild(row);
-        });
-        modal.classList.remove('hidden');
+    // АДМИН-АВТОРИЗАЦИЯ
+    function openAdminAuthModal() {
+      document.getElementById('adminMasterPassInput').value = '';
+      document.getElementById('adminAuthError').classList.add('hidden');
+      document.getElementById('adminAuthModal').classList.remove('hidden');
+    }
+
+    function closeAdminAuthModal() {
+      document.getElementById('adminAuthModal').classList.add('hidden');
+    }
+
+    function verifyAdminPass(e) {
+      e.preventDefault();
+      const entered = document.getElementById('adminMasterPassInput').value.trim();
+      if (entered === MASTER_ADMIN_PASS) {
+        closeAdminAuthModal();
+        openAdminPanel();
       } else {
-        modal.classList.add('hidden');
+        const err = document.getElementById('adminAuthError');
+        err.innerText = translations[currentLang].adminAuthErrorMsg;
+        err.classList.remove('hidden');
       }
+    }
+
+    function openAdminPanel() {
+      const tbody = document.getElementById('registryTableBody');
+      tbody.innerHTML = '';
+      teachersData.forEach((t, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="p-3 text-slate-400 font-bold">${i + 1}</td>
+          <td class="p-3 font-bold text-slate-800">${t.name}</td>
+          <td class="p-3 text-slate-500">${t.email}</td>
+          <td class="p-3 text-blue-600 font-mono font-bold text-base bg-blue-50/50">${t.password}</td>
+        `;
+        tbody.appendChild(row);
+      });
+      document.getElementById('adminPanelModal').classList.remove('hidden');
+    }
+
+    function closeAdminPanel() {
+      document.getElementById('adminPanelModal').classList.add('hidden');
     }
 
     function copyAllPasswords() {
       const text = teachersData.map(t => `${t.name}\t${t.email}\t${t.password}`).join('\n');
       navigator.clipboard.writeText(text).then(() => {
-        alert('Бардык 78 сыр сөз көчүрүлдү!');
+        alert(currentLang === 'kg' ? 'Бардык сыр сөздөр көчүрүлдү!' : 'Все пароли успешно скопированы!');
       });
     }
 
-    // Баштапкы жүктөө
-    renderTeachers(teachersData);
-    buildAlphabet();
+    function exportCSV() {
+      let csv = '\uFEFF№,ФИО,Email,Password\n';
+      teachersData.forEach((t, i) => {
+        csv += `"${i + 1}","${t.name}","${t.email}","${t.password}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', `teachers_passwords_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Баштапкы ишке киргизүү
+    setLanguage('kg');
   </script>
 </body>
 </html>
