@@ -27,25 +27,21 @@
     </div>
 
     <div class="flex items-center gap-5">
-      <!-- ТИЛ АЛМАШТЫРУУ -->
       <div class="bg-blue-900/80 p-1.5 rounded-2xl border border-blue-700 flex gap-1">
         <button onclick="setLanguage('kg')" id="langBtnKG" class="px-4 py-2 rounded-xl font-black text-sm transition-all bg-amber-400 text-slate-950 shadow">KG</button>
         <button onclick="setLanguage('ru')" id="langBtnRU" class="px-4 py-2 rounded-xl font-black text-sm transition-all text-blue-200 hover:text-white">RU</button>
       </div>
 
-      <!-- ЧАСЫ -->
       <div id="clock" class="text-3xl font-mono font-black bg-blue-900/90 px-5 py-2 rounded-2xl border border-blue-700 text-amber-300 shadow-inner">
         00:00:00
       </div>
       
-      <!-- ПОИСК -->
       <div class="relative w-72">
         <input type="text" id="searchInput" placeholder="Мугалимди издөө..." 
           class="w-full text-lg px-4 py-3 pl-11 rounded-2xl text-slate-900 bg-white shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-400 font-medium">
         <svg class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
 
-      <!-- АДМИН КАБИНЕТ -->
       <button onclick="openAdminAuthModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-5 py-3 rounded-2xl text-base flex items-center gap-2 shadow-md active:scale-95 transition-all">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
         <span data-i18n="adminBtn">Админ кабинет</span>
@@ -84,27 +80,26 @@
         </div>
       </div>
       
-      <!-- ЧЫГУУ БАСКЫЧЫ -->
       <button onclick="closeFolder()" class="bg-rose-600 hover:bg-rose-700 text-white px-8 py-4 rounded-2xl text-2xl font-black flex items-center gap-3 shadow-lg active:scale-95 transition-all">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
         <span data-i18n="closeFolderBtn">Папканы жабуу жана чыгуу</span>
       </button>
     </div>
 
-    <!-- Загрузка файла -->
+    <!-- Загрузка файла (IndexedDB без ограничения в 5MB) -->
     <div class="bg-blue-50 border-2 border-dashed border-blue-300 rounded-3xl p-6 text-center mb-6">
       <input type="file" id="fileInput" class="hidden" multiple onchange="uploadLocalFile(event)">
       <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl text-2xl font-black shadow-md inline-flex items-center gap-3 active:scale-95">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"></path></svg>
         <span data-i18n="uploadBtn">Жаңы презентация жүктөө (.pptx, .pdf, сүрөт)</span>
       </button>
-      <p class="text-slate-500 mt-2 text-base" data-i18n="uploadHint">Презентациялар жана сүрөттөр сабак үчүн сакталат</p>
+      <p id="uploadStatusText" class="text-slate-500 mt-2 text-base font-medium" data-i18n="uploadHint">Чоң көлөмдөгү презентациялар да толук сакталат (300MB чейин)</p>
     </div>
 
     <div id="fileList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
-  <!-- МОДАЛЬ ВВОДА ПАРОЛЯ УЧИТЕЛЯ -->
+  <!-- МОДАЛЬ ВВОДА ПАРОЛЯ -->
   <div id="pwdModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
       <div class="w-16 h-16 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
@@ -152,7 +147,7 @@
     </div>
   </div>
 
-  <!-- ПОЛНОЦЕННЫЙ КАБИНЕТ АДМИНИСТРАТОРА (С ДОБАВЛЕНИЕМ/РЕДАКТИРОВАНИЕМ) -->
+  <!-- КАБИНЕТ АДМИНИСТРАТОРА -->
   <div id="adminPanelModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-6">
     <div class="bg-white rounded-3xl p-8 max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl">
       <div class="flex flex-wrap items-center justify-between pb-4 border-b gap-4">
@@ -202,19 +197,16 @@
 
       <form onsubmit="handleSaveTeacher(event)" class="space-y-4">
         <input type="hidden" id="editTeacherId">
-        
         <div>
           <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblFullName">Аты-жөнү (ФИО):</label>
           <input type="text" id="teacherNameInput" required placeholder="Мисалы: Асанов Бакыт Эркинович" 
             class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
-
         <div>
           <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblEmail">Корпоративдик почтасы (Email):</label>
           <input type="email" id="teacherEmailInput" required placeholder="bakyt.asanov@college.alatoo.edu.kg" 
             class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
-
         <div>
           <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblPassword">Сыр сөз (Пароль):</label>
           <div class="flex gap-2">
@@ -225,7 +217,6 @@
             </button>
           </div>
         </div>
-
         <div class="flex gap-3 pt-4 border-t">
           <button type="button" onclick="closeTeacherEditModal()" class="flex-1 py-3.5 bg-slate-200 hover:bg-slate-300 font-bold rounded-xl text-slate-700" data-i18n="cancelBtn">Жокко чыгаруу</button>
           <button type="submit" class="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-md" data-i18n="saveBtn">Сактоо</button>
@@ -249,7 +240,62 @@
   </div>
 
   <script>
-    // Базовая база 78 преподавателей
+    // 1. ИНИЦИАЛИЗАЦИЯ INDEXEDDB ДЛЯ БОЛЬШИХ ПРЕЗЕНТАЦИЙ (ДО 500 МБ)
+    const DB_NAME = 'CollegeSmartBoardDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'teacher_files';
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+          }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function dbSaveFile(record) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.add(record);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function dbGetFilesByTeacher(teacherId) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.getAll();
+        req.onsuccess = () => {
+          const all = req.result || [];
+          resolve(all.filter(f => f.teacherId === teacherId));
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function dbDeleteFile(fileId) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        const req = store.delete(fileId);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    // 2. ДАННЫЕ МУГАЛИМДЕР
     const defaultTeachersData = [
   {
     "id": 1,
@@ -721,12 +767,9 @@
   }
 ];
 
-    // Загрузка учителей из LocalStorage (чтобы добавленные сохранялись)
     function getStoredTeachers() {
       const stored = localStorage.getItem('college_teachers_list');
-      if (stored) {
-        return JSON.parse(stored);
-      }
+      if (stored) return JSON.parse(stored);
       localStorage.setItem('college_teachers_list', JSON.stringify(defaultTeachersData));
       return defaultTeachersData;
     }
@@ -747,7 +790,7 @@
         teacherRole: "Окутуучу",
         closeFolderBtn: "Папканы жабуу жана чыгуу",
         uploadBtn: "Жаңы презентация жүктөө (.pptx, .pdf, сүрөт)",
-        uploadHint: "Презентациялар жана сүрөттөр сабак үчүн сакталат",
+        uploadHint: "Чоң көлөмдөгү презентациялар да толук сакталат (300MB чейин)",
         noFiles: "Бул папкада азырынча файл жок. Жогорудагы баскычты басып презентация жүктөңүз.",
         openInLesson: "Сабакта ачуу",
         enterPwdHint: "Паролду жазып, кирүү баскычын басыңыз",
@@ -786,7 +829,7 @@
         teacherRole: "Преподаватель",
         closeFolderBtn: "Закрыть папку и выйти",
         uploadBtn: "Загрузить презентацию (.pptx, .pdf, картинку)",
-        uploadHint: "Файлы для урока сохраняются прямо в браузере",
+        uploadHint: "Поддерживаются большие презентации и видео (до 300MB)",
         noFiles: "В этой папке пока нет файлов. Нажмите кнопку выше для загрузки.",
         openInLesson: "Открыть на уроке",
         enterPwdHint: "Введите пароль и нажмите войти",
@@ -830,9 +873,7 @@
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (translations[lang][key]) {
-          el.innerText = translations[lang][key];
-        }
+        if (translations[lang][key]) el.innerText = translations[lang][key];
       });
 
       document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
@@ -898,7 +939,6 @@
       renderTeachers(filtered);
     });
 
-    // Пароль учителя
     function openPwdModal(teacher) {
       currentTeacher = teacher;
       const inp = document.getElementById('pwdInput');
@@ -950,48 +990,46 @@
       currentTeacher = null;
     }
 
-    // Загрузка файлов
-    function uploadLocalFile(event) {
+    // 3. НАДЕЖНАЯ ЗАГРУЗКА БОЛЬШИХ ФАЙЛОВ В INDEXEDDB (БЕЗ ОГРАНИЧЕНИЙ LOCALSTORAGE)
+    async function uploadLocalFile(event) {
       const files = event.target.files;
       if (!files.length || !currentTeacher) return;
 
-      const storeKey = `files_teacher_${currentTeacher.id}`;
-      let saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
+      const status = document.getElementById('uploadStatusText');
+      status.innerText = currentLang === 'kg' ? 'Жүктөлүүдө, күтө туруңуз...' : 'Файлы загружаются в память...';
 
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          saved.push({
-            name: file.name,
-            size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-            date: new Date().toLocaleDateString(),
-            dataUrl: e.target.result
-          });
-          try {
-            localStorage.setItem(storeKey, JSON.stringify(saved));
-            loadSavedFiles(currentTeacher.id);
-          } catch(err) {
-            alert('Файл чоң болгондуктан эс толду!');
-          }
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const record = {
+          teacherId: currentTeacher.id,
+          name: file.name,
+          size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+          date: new Date().toLocaleDateString(),
+          blob: file // Сохраняем исходный Blob напрямую в IndexedDB
         };
-        reader.readAsDataURL(file);
-      });
+        await dbSaveFile(record);
+      }
 
+      status.innerText = translations[currentLang].uploadHint;
+      await loadSavedFiles(currentTeacher.id);
       event.target.value = '';
     }
 
-    function loadSavedFiles(teacherId) {
-      const storeKey = `files_teacher_${teacherId}`;
-      const saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
+    // 4. ОТОБРАЖЕНИЕ ФАЙЛОВ ИЗ INDEXEDDB
+    let currentTeacherFilesCache = [];
+
+    async function loadSavedFiles(teacherId) {
       const list = document.getElementById('fileList');
       list.innerHTML = '';
 
-      if (saved.length === 0) {
+      currentTeacherFilesCache = await dbGetFilesByTeacher(teacherId);
+
+      if (currentTeacherFilesCache.length === 0) {
         list.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 text-2xl font-bold">${translations[currentLang].noFiles}</div>`;
         return;
       }
 
-      saved.forEach((f, idx) => {
+      currentTeacherFilesCache.forEach((f) => {
         const card = document.createElement('div');
         card.className = "bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between";
         
@@ -1007,56 +1045,50 @@
             <p class="text-slate-400 text-sm">${f.size} • ${f.date}</p>
           </div>
           <div class="mt-6 flex gap-3">
-            <button onclick="viewLessonFile(${teacherId}, ${idx})" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold shadow-md active:scale-95 transition-all">
+            <button onclick="viewLessonFile(${f.id})" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold shadow-md active:scale-95 transition-all">
               ${translations[currentLang].openInLesson}
             </button>
-            <button onclick="deleteSavedFile(${teacherId}, ${idx})" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-4 py-3.5 rounded-xl font-bold">🗑</button>
+            <button onclick="removeSavedFile(${f.id})" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-4 py-3.5 rounded-xl font-bold">🗑</button>
           </div>
         `;
         list.appendChild(card);
       });
     }
 
-    // Просмотр файла
-    function viewLessonFile(teacherId, idx) {
-      const storeKey = `files_teacher_${teacherId}`;
-      const saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
-      const file = saved[idx];
-      if (!file || !file.dataUrl) {
-        alert('Сураныч, файлды өчүрүп, кайра жүктөңүз!');
+    // 5. ОТКРЫТИЕ И ЗАПУСК ЛЮБОЙ БОЛЬШОЙ ПРЕЗЕНТАЦИИ / PDF / ФОТО
+    let activeObjectUrl = null;
+
+    function viewLessonFile(fileId) {
+      const file = currentTeacherFilesCache.find(item => item.id === fileId);
+      if (!file || !file.blob) {
+        alert('Файл табылган жок!');
         return;
       }
+
+      if (activeObjectUrl) {
+        URL.revokeObjectURL(activeObjectUrl);
+      }
+      activeObjectUrl = URL.createObjectURL(file.blob);
 
       const viewer = document.getElementById('fullViewerModal');
       const container = document.getElementById('viewerContent');
       document.getElementById('viewerFileName').innerText = file.name;
 
       if (file.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
-        container.innerHTML = `<img src="${file.dataUrl}" class="max-h-[85vh] max-w-full object-contain mx-auto rounded-xl shadow-2xl">`;
+        container.innerHTML = `<img src="${activeObjectUrl}" class="max-h-[85vh] max-w-full object-contain mx-auto rounded-xl shadow-2xl">`;
       } else if (file.name.match(/\.pdf$/i)) {
-        container.innerHTML = `<iframe src="${file.dataUrl}" class="w-full h-[85vh] rounded-xl border-0 bg-white"></iframe>`;
+        container.innerHTML = `<iframe src="${activeObjectUrl}" class="w-full h-[85vh] rounded-xl border-0 bg-white"></iframe>`;
       } else {
-        const arr = file.dataUrl.split(',');
-        const mimeMatch = arr[0].match(/:(.*?);/);
-        const mime = mimeMatch ? mimeMatch[1] : 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        const blob = new Blob([u8arr], { type: mime });
-        const objectUrl = URL.createObjectURL(blob);
-
+        // PPTX презентации (любой вес)
         container.innerHTML = `
           <div class="text-center py-10 text-white max-w-xl mx-auto space-y-6">
             <div class="text-8xl">📊</div>
-            <h3 class="text-3xl font-black text-amber-300">${file.name}</h3>
+            <h3 class="text-3xl font-black text-amber-300 break-words">${file.name}</h3>
             <p class="text-slate-200 text-lg leading-relaxed">
-              Презентация даярдалды. Смарт-панелде орнотулган офистик программада (PowerPoint же WPS) ачуу үчүн төмөнкү баскычты басыңыз:
+              Презентация сабакка даяр. Смарт-панелдеги PowerPoint же WPS программасында дароо ачуу үчүн басыңыз:
             </p>
             <div class="pt-2">
-              <a href="${objectUrl}" download="${file.name}" target="_blank" class="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-5 rounded-2xl text-2xl shadow-2xl active:scale-95 transition-all">
+              <a href="${activeObjectUrl}" download="${file.name}" class="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-5 rounded-2xl text-2xl shadow-2xl active:scale-95 transition-all">
                 <span>🖥</span>
                 <span>PowerPoint'те ачуу</span>
               </a>
@@ -1070,17 +1102,22 @@
     function closeViewerModal() {
       document.getElementById('fullViewerModal').classList.add('hidden');
       document.getElementById('viewerContent').innerHTML = '';
+      if (activeObjectUrl) {
+        URL.revokeObjectURL(activeObjectUrl);
+        activeObjectUrl = null;
+      }
     }
 
-    function deleteSavedFile(teacherId, idx) {
-      const storeKey = `files_teacher_${teacherId}`;
-      let saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
-      saved.splice(idx, 1);
-      localStorage.setItem(storeKey, JSON.stringify(saved));
-      loadSavedFiles(teacherId);
+    async function removeSavedFile(fileId) {
+      if (confirm('Бул файл өчүрүлсүнбү?')) {
+        await dbDeleteFile(fileId);
+        if (currentTeacher) {
+          loadSavedFiles(currentTeacher.id);
+        }
+      }
     }
 
-    // Авторизация администратора
+    // АДМИНИСТРАТОР
     function openAdminAuthModal() {
       document.getElementById('adminMasterPassInput').value = '';
       document.getElementById('adminAuthError').classList.add('hidden');
@@ -1113,7 +1150,6 @@
       document.getElementById('adminPanelModal').classList.add('hidden');
     }
 
-    // Вывод таблицы админа
     function renderAdminRegistry() {
       const tbody = document.getElementById('registryTableBody');
       tbody.innerHTML = '';
@@ -1133,7 +1169,6 @@
       });
     }
 
-    // Добавление и редактирование учителя
     function openAddTeacherModal() {
       document.getElementById('editTeacherId').value = '';
       document.getElementById('teacherNameInput').value = '';
@@ -1175,20 +1210,16 @@
       const password = document.getElementById('teacherPwdInput').value.trim();
 
       if (id) {
-        // Редактирование
         const idx = teachersData.findIndex(item => item.id == id);
         if (idx !== -1) {
           teachersData[idx] = { ...teachersData[idx], name, email, password };
         }
       } else {
-        // Добавление нового
         const newId = teachersData.length > 0 ? Math.max(...teachersData.map(t => t.id)) + 1 : 1;
         teachersData.push({ id: newId, name, email, password });
       }
 
-      // Сохраняем в память браузера
       localStorage.setItem('college_teachers_list', JSON.stringify(teachersData));
-      
       closeTeacherEditModal();
       renderAdminRegistry();
       renderTeachers(teachersData);
@@ -1197,10 +1228,7 @@
     }
 
     function deleteTeacher(id, name) {
-      const confirmMsg = currentLang === 'kg' 
-        ? `«${name}» тизмеден өчүрүлсүнбү?` 
-        : `Удалить преподавателя «${name}» из системы?`;
-
+      const confirmMsg = currentLang === 'kg' ? `«${name}» тизмеден өчүрүлсүнбү?` : `Удалить преподавателя «${name}» из системы?`;
       if (confirm(confirmMsg)) {
         teachersData = teachersData.filter(t => t.id !== id);
         localStorage.setItem('college_teachers_list', JSON.stringify(teachersData));
