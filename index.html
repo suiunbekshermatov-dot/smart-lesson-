@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Колледж смарт-панели — Мугалимдердин папкалары</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    button { touch-action: manipulation; user-select: none; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans select-none">
+
+  <!-- ЖОГОРКУ ПАНЕЛЬ (75" чоң экран үчүн) -->
+  <header class="bg-blue-950 text-white px-8 py-5 flex items-center justify-between shadow-lg sticky top-0 z-40">
+    <div class="flex items-center gap-5">
+      <div class="bg-blue-600 p-3.5 rounded-2xl shadow-inner">
+        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+      </div>
+      <div>
+        <h1 class="text-3xl font-black tracking-wide uppercase">Окуу материалдары порталы</h1>
+        <p class="text-blue-200 text-base">Интерактивдүү смарт-панель (75") үчүн электрондук каталог</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <div id="clock" class="text-3xl font-mono font-black bg-blue-900/90 px-6 py-2.5 rounded-2xl border border-blue-700 text-amber-300 shadow-inner">
+        00:00:00
+      </div>
+      
+      <!-- Поиск мугалима -->
+      <div class="relative w-80">
+        <input type="text" id="searchInput" placeholder="Мугалимди издөө..." 
+          class="w-full text-xl px-5 py-3 pl-12 rounded-2xl text-slate-900 bg-white shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-400 font-medium">
+        <svg class="w-6 h-6 text-slate-400 absolute left-4 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+
+      <!-- Баскыч: Реестр паролей (Админ үчүн) -->
+      <button onclick="toggleRegistryModal(true)" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-5 py-3 rounded-2xl text-lg flex items-center gap-2 shadow-md active:scale-95 transition-all">
+        📋 Паролдор тизмеси
+      </button>
+    </div>
+  </header>
+
+  <!-- АЛФАВИТТИК ЛЕНТА (Тез өтүү үчүн) -->
+  <div class="bg-white border-b border-slate-200 px-8 py-3 flex items-center justify-between overflow-x-auto shadow-sm">
+    <span class="text-sm font-bold text-slate-400 uppercase tracking-wider mr-4">Алфавит:</span>
+    <div id="alphabetList" class="flex gap-2"></div>
+  </div>
+
+  <!-- НЕГИЗГИ ТИЗМЕ (78 Мугалимдин папкалары) -->
+  <main id="mainGridSection" class="flex-1 p-8 max-w-7xl mx-auto w-full">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-black text-slate-700">Бардык мугалимдер: <span id="teacherCount" class="text-blue-600 font-extrabold">0</span></h2>
+      <p class="text-slate-400 text-sm">Папканы ачуу үчүн өзүңүздүн ысымыңызды басыңыз</p>
+    </div>
+    <div id="teachersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+  </main>
+
+  <!-- АЧЫЛГАН ПАПКА (ПРЕЗЕНТАЦИЯЛАР ЖАНА САБАК) -->
+  <section id="folderView" class="hidden flex-1 p-8 flex flex-col max-w-7xl mx-auto w-full">
+    <div class="bg-white p-6 rounded-3xl shadow-lg border border-slate-200 flex items-center justify-between mb-6">
+      <div class="flex items-center gap-5">
+        <div class="bg-amber-100 text-amber-700 p-4 rounded-2xl">
+          <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+        </div>
+        <div>
+          <h2 id="activeTeacherName" class="text-3xl font-black text-slate-900">...</h2>
+          <p id="activeTeacherEmail" class="text-slate-400 text-sm mt-0.5">...</p>
+        </div>
+      </div>
+      
+      <!-- Чыгуу баскычы -->
+      <button onclick="closeFolder()" class="bg-rose-600 hover:bg-rose-700 text-white px-8 py-4 rounded-2xl text-2xl font-black flex items-center gap-3 shadow-lg active:scale-95 transition-all">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        Папканы жабуу жана чыгуу
+      </button>
+    </div>
+
+    <!-- Презентация кошуу баскычы -->
+    <div class="bg-blue-50 border-2 border-dashed border-blue-300 rounded-3xl p-6 text-center mb-6">
+      <input type="file" id="fileInput" class="hidden" multiple onchange="uploadLocalFile(event)">
+      <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl text-2xl font-black shadow-md inline-flex items-center gap-3 active:scale-95">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"></path></svg>
+        Жаңы презентация жүктөө (.pptx, .pdf)
+      </button>
+      <p class="text-slate-500 mt-2 text-base">Бул сабак үчүн файлдар браузердин эсине коопсуз сакталат</p>
+    </div>
+
+    <!-- Файлдардын тизмеси -->
+    <div id="fileList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- СЕНСОРДУК ПАРОЛЬ ТЕРҮҮ МОДАЛДЫК ТЕРЕЗЕСИ (75" ДОСКА ҮЧҮН ТОЛУК КЛАВИАТУРА) -->
+  <div id="pwdModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-8 max-w-xl w-full shadow-2xl border border-slate-200 text-center">
+      <div class="w-16 h-16 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
+        <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+      </div>
+      <h3 id="pwdModalTeacherName" class="text-2xl font-black text-slate-800 mb-1">...</h3>
+      <p class="text-slate-500 text-sm mb-4">Өзүңүздүн сыр сөзүңүздү териңиз же клавиатураны колдонуңуз</p>
+
+      <!-- Инпут талаасы + көз баскычы -->
+      <div class="relative mb-4">
+        <input type="password" id="pwdInput" readonly placeholder="Паролду басыңыз" 
+          class="w-full text-3xl font-mono text-center tracking-widest py-3.5 px-12 bg-slate-100 rounded-2xl border-2 border-slate-300 focus:outline-none focus:border-blue-600">
+        <button onclick="togglePwdVisibility()" class="absolute right-4 top-4 text-slate-500 hover:text-slate-800">
+          <svg id="eyeIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+        </button>
+      </div>
+
+      <!-- Сенсордук сандык клавиатура (0-9 жана символдор) -->
+      <div class="grid grid-cols-3 gap-2.5 mb-3">
+        <button onclick="pressKey('1')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">1</button>
+        <button onclick="pressKey('2')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">2</button>
+        <button onclick="pressKey('3')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">3</button>
+        <button onclick="pressKey('4')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">4</button>
+        <button onclick="pressKey('5')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">5</button>
+        <button onclick="pressKey('6')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">6</button>
+        <button onclick="pressKey('7')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">7</button>
+        <button onclick="pressKey('8')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">8</button>
+        <button onclick="pressKey('9')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">9</button>
+        <button onclick="pressKey('0')" class="h-16 text-3xl font-bold bg-slate-100 active:bg-blue-600 active:text-white rounded-xl">0</button>
+        <button onclick="pressKey('@')" class="h-16 text-2xl font-bold bg-amber-50 text-amber-700 active:bg-amber-600 active:text-white rounded-xl">@</button>
+        <button onclick="deleteKey()" class="h-16 text-2xl font-bold bg-slate-200 active:bg-rose-500 active:text-white rounded-xl">⌫ Өчүрүү</button>
+      </div>
+
+      <!-- Сөздөрдү тез басуу блоку (Паролдордо колдонулган ачкыч сөздөр) -->
+      <div class="grid grid-cols-4 gap-2 mb-4">
+        <button onclick="pressWord('Alatoo')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Alatoo</button>
+        <button onclick="pressWord('Bilim')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Bilim</button>
+        <button onclick="pressWord('Ustoz')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Ustoz</button>
+        <button onclick="pressWord('Sabak')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Sabak</button>
+        <button onclick="pressWord('Kadam')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Kadam</button>
+        <button onclick="pressWord('Akyl')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Akyl</button>
+        <button onclick="pressWord('Ordo')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Ordo</button>
+        <button onclick="pressWord('Birimdik')" class="py-2.5 bg-blue-50 text-blue-700 font-bold rounded-xl text-sm active:scale-95">Birimdik</button>
+      </div>
+      <div class="flex justify-center gap-2 mb-4">
+        <button onclick="pressKey('#')" class="px-5 py-2 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">#</button>
+        <button onclick="pressKey('!')" class="px-5 py-2 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">!</button>
+        <button onclick="pressKey('$')" class="px-5 py-2 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">$</button>
+        <button onclick="pressKey('*')" class="px-5 py-2 bg-slate-200 text-slate-800 font-bold rounded-lg text-lg">*</button>
+      </div>
+
+      <!-- Кирүү жана Жокко чыгаруу баскычтары -->
+      <div class="flex gap-3">
+        <button onclick="cancelPwdModal()" class="flex-1 py-4 bg-slate-200 hover:bg-slate-300 font-bold text-lg rounded-2xl">Жокко чыгаруу</button>
+        <button onclick="submitPassword()" class="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-xl rounded-2xl shadow-lg active:scale-95">Ачуу (Кирүү)</button>
+      </div>
+      <p id="pwdError" class="text-rose-600 font-bold mt-3 hidden"></p>
+    </div>
+  </div>
+
+  <!-- РЕЕСТР / ЭКСПОРТ МОДАЛДЫК ТЕРЕЗЕСИ (Админ үчүн бардык сыр сөздөр) -->
+  <div id="registryModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-6">
+    <div class="bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b">
+        <div>
+          <h3 class="text-2xl font-black text-slate-900">Мугалимдердин сыр сөздөр ведомосту (78 адам)</h3>
+          <p class="text-slate-500 text-sm">Бул тизмени басып чыгарып же Excel түрүндө сактап алсаңыз болот</p>
+        </div>
+        <button onclick="toggleRegistryModal(false)" class="text-slate-400 hover:text-slate-700 text-3xl font-bold">&times;</button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto my-4 border rounded-2xl">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-slate-100 text-slate-700 text-sm font-bold sticky top-0">
+            <tr>
+              <th class="p-3 border-b">№</th>
+              <th class="p-3 border-b">Мугалимдин аты-жөнү</th>
+              <th class="p-3 border-b">Почтасы</th>
+              <th class="p-3 border-b text-blue-600 font-mono">Сыр сөз (Пароль)</th>
+            </tr>
+          </thead>
+          <tbody id="registryTableBody" class="text-sm divide-y"></tbody>
+        </table>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="copyAllPasswords()" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-base">Көчүрүп алуу (Copy)</button>
+        <button onclick="toggleRegistryModal(false)" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-base">Жабуу</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 78 колледж мугалими базасы
+    const teachersData = [
+  {
+    "id": 1,
+    "name": "Abdraeva Aliya",
+    "email": "aliya.abdraeva@college.alatoo.edu.kg",
+    "password": "Alatoo$125"
+  },
+  {
+    "id": 2,
+    "name": "Abdralieva Aliia",
+    "email": "aliia.abdralieva@college.alatoo.edu.kg",
+    "password": "Ustoz!328"
+  },
+  {
+    "id": 3,
+    "name": "Abdyrazak Aida",
+    "email": "aida.abdyrazak@college.alatoo.edu.kg",
+    "password": "Alatoo*792"
+  },
+  {
+    "id": 4,
+    "name": "Abekova Baktygul",
+    "email": "baktygul.abekova@college.alatoo.edu.kg",
+    "password": "Alatoo@704"
+  },
+  {
+    "id": 5,
+    "name": "Abylova Aidana",
+    "email": "aidana.abylova@college.alatoo.edu.kg",
+    "password": "Bilim#130"
+  },
+  {
+    "id": 6,
+    "name": "Aigerim Akusheva",
+    "email": "akusheva.aigerim@college.alatoo.edu.kg",
+    "password": "Ustoz*338"
+  },
+  {
+    "id": 7,
+    "name": "Akylbek uulu Nazarbek",
+    "email": "nazarbek.akylbekuulu@college.alatoo.edu.kg",
+    "password": "Birimdik*127"
+  },
+  {
+    "id": 8,
+    "name": "Aliev Dosbol",
+    "email": "dosbol.aliev@college.alatoo.edu.kg",
+    "password": "Ustoz*833"
+  },
+  {
+    "id": 9,
+    "name": "Alimpieva Larisa",
+    "email": "larisa.alimpieva@college.alatoo.edu.kg",
+    "password": "Kadam@325"
+  },
+  {
+    "id": 10,
+    "name": "Alymbekova S.M",
+    "email": "sm.alymbekova@college.alatoo.edu.kg",
+    "password": "Birimdik#384"
+  },
+  {
+    "id": 11,
+    "name": "Alyshbaev Bekmyrza",
+    "email": "bekmyrza.alyshbaev@college.alatoo.edu.kg",
+    "password": "Sabak@814"
+  },
+  {
+    "id": 12,
+    "name": "Amanbaeva Saodat",
+    "email": "saodat.amanbaeva@college.alatoo.edu.kg",
+    "password": "Sabaq!384"
+  },
+  {
+    "id": 13,
+    "name": "Andersen Nicholas",
+    "email": "nicholas.andersen@college.alatoo.edu.kg",
+    "password": "Ustoz$881"
+  },
+  {
+    "id": 14,
+    "name": "Arystanov Talant",
+    "email": "talant.arystanov@college.alatoo.edu.kg",
+    "password": "Alatoo@194"
+  },
+  {
+    "id": 15,
+    "name": "Asakeev Aidar",
+    "email": "aidar.asakeev@college.alatoo.edu.kg",
+    "password": "Alatoo$467"
+  },
+  {
+    "id": 16,
+    "name": "Atabaeva Ainazik",
+    "email": "ainazik.atabaeva@college.alatoo.edu.kg",
+    "password": "Birimdik#370"
+  },
+  {
+    "id": 17,
+    "name": "Badilovskii Evgenii",
+    "email": "evgenii.badilovskii@college.alatoo.edu.kg",
+    "password": "Akyl#649"
+  },
+  {
+    "id": 18,
+    "name": "Bakalchiev Bekmyrza",
+    "email": "bekmyrza.bakalchiev@college.alatoo.edu.kg",
+    "password": "Kadam*180"
+  },
+  {
+    "id": 19,
+    "name": "Batyralieva Baktygul",
+    "email": "baktygul.batyralieva@college.alatoo.edu.kg",
+    "password": "Mugalim*949"
+  },
+  {
+    "id": 20,
+    "name": "Belekova Raushan",
+    "email": "raushan.belekova@college.alatoo.edu.kg",
+    "password": "Sabaq!691"
+  },
+  {
+    "id": 21,
+    "name": "Bolushev Erbol",
+    "email": "erbol.bolushev@college.alatoo.edu.kg",
+    "password": "Alatoo!146"
+  },
+  {
+    "id": 22,
+    "name": "Checheibaev Amanbek",
+    "email": "amanbek.checheibaev@college.alatoo.edu.kg",
+    "password": "Mugalim!181"
+  },
+  {
+    "id": 23,
+    "name": "Chokusheva C",
+    "email": "c.chokusheva@college.alatoo.edu.kg",
+    "password": "Alatoo$489"
+  },
+  {
+    "id": 24,
+    "name": "Chynybekov Zamir",
+    "email": "zamir.chynybekov@college.alatoo.edu.kg",
+    "password": "Akyl$750"
+  },
+  {
+    "id": 25,
+    "name": "Derkenbaeva Saltanat",
+    "email": "saltanat.derkenbaeva@college.alatoo.edu.kg",
+    "password": "Sabak$479"
+  },
+  {
+    "id": 26,
+    "name": "Dyikanbaeva Gulnura",
+    "email": "gulnura.dyikanbaeva@college.alatoo.edu.kg",
+    "password": "Ustoz$786"
+  },
+  {
+    "id": 27,
+    "name": "Dyikanova Ainura",
+    "email": "ainura.dyikanova@college.alatoo.edu.kg",
+    "password": "Alatoo!723"
+  },
+  {
+    "id": 28,
+    "name": "Dzhaparov Murat",
+    "email": "murat.dzhaparov@college.alatoo.edu.kg",
+    "password": "Ordo!846"
+  },
+  {
+    "id": 29,
+    "name": "Dzhyrgalbekov Kubanych",
+    "email": "kubanych.dzhyrgalbekov@college.alatoo.edu.kg",
+    "password": "Sabak@573"
+  },
+  {
+    "id": 30,
+    "name": "Ergeshova Nurzada",
+    "email": "nurzada.ergeshova@college.alatoo.edu.kg",
+    "password": "Mugalim*755"
+  },
+  {
+    "id": 31,
+    "name": "erustan agai",
+    "email": "agai.erustan@college.alatoo.edu.kg",
+    "password": "Ustoz$801"
+  },
+  {
+    "id": 32,
+    "name": "Feruza Feruza",
+    "email": "feruza.feruza@college.alatoo.edu.kg",
+    "password": "Bilim#334"
+  },
+  {
+    "id": 33,
+    "name": "Gay Quintin",
+    "email": "quintin.gay@college.alatoo.edu.kg",
+    "password": "Sabaq$510"
+  },
+  {
+    "id": 34,
+    "name": "Gulbarga Irshad",
+    "email": "irshad.gulbarga@college.alatoo.edu.kg",
+    "password": "Alatoo*316"
+  },
+  {
+    "id": 35,
+    "name": "Ibragimova Leila",
+    "email": "leila.ibragimova@college.alatoo.edu.kg",
+    "password": "Sabaq@317"
+  },
+  {
+    "id": 36,
+    "name": "Ibraimova Kamila",
+    "email": "kamila.ibraimova@college.alatoo.edu.kg",
+    "password": "Kadam@758"
+  },
+  {
+    "id": 37,
+    "name": "Ibraimova Leila",
+    "email": "leila.ibraimova@college.alatoo.edu.kg",
+    "password": "Sabak!371"
+  },
+  {
+    "id": 38,
+    "name": "Imankulova Aizhamal",
+    "email": "aizhamal.imankulova@college.alatoo.edu.kg",
+    "password": "Ustoz*862"
+  },
+  {
+    "id": 39,
+    "name": "Indigaraeva Zhyldyz",
+    "email": "zhyldyz.indigaraeva@college.alatoo.edu.kg",
+    "password": "Ordo*369"
+  },
+  {
+    "id": 40,
+    "name": "Isaeva Salidat",
+    "email": "salidat.isaeva@college.alatoo.edu.kg",
+    "password": "Kadam@697"
+  },
+  {
+    "id": 41,
+    "name": "iskender iskender",
+    "email": "iskender.iskender@college.alatoo.edu.kg",
+    "password": "Sabaq!324"
+  },
+  {
+    "id": 42,
+    "name": "Jorobekov Eldar",
+    "email": "eldar.jorobekov@college.alatoo.edu.kg",
+    "password": "Ordo#605"
+  },
+  {
+    "id": 43,
+    "name": "Karimov Azizbek",
+    "email": "azizbek.karimov@college.alatoo.edu.kg",
+    "password": "Bilim#981"
+  },
+  {
+    "id": 44,
+    "name": "Kartaeva Nurzada",
+    "email": "nurzada.kartaeva@college.alatoo.edu.kg",
+    "password": "Sabak!742"
+  },
+  {
+    "id": 45,
+    "name": "Kayipberdieva Zhyldyz",
+    "email": "zhyldyz.kayipberdieva@college.alatoo.edu.kg",
+    "password": "Kadam#710"
+  },
+  {
+    "id": 46,
+    "name": "Kenzhebek kyzy Mairam",
+    "email": "mairam.kenzhebekkyzy@college.alatoo.edu.kg",
+    "password": "Kadam*490"
+  },
+  {
+    "id": 47,
+    "name": "Khazhazh Khadidzha",
+    "email": "khadidzha.khazhazh@college.alatoo.edu.kg",
+    "password": "Akyl$641"
+  },
+  {
+    "id": 48,
+    "name": "Kochkorbaev Iskender",
+    "email": "iskender.kochkorbaev@college.alatoo.edu.kg",
+    "password": "Ordo#981"
+  },
+  {
+    "id": 49,
+    "name": "Kubanychbek kyzy Feruza",
+    "email": "feruza.kubanychbekkyzy@college.alatoo.edu.kg",
+    "password": "Alatoo*798"
+  },
+  {
+    "id": 50,
+    "name": "Kurmanova Salia",
+    "email": "salia.kurmanova@college.alatoo.edu.kg",
+    "password": "Mugalim$887"
+  },
+  {
+    "id": 51,
+    "name": "KUTMANOVA NARGIZA",
+    "email": "nargiza.kutmanova@college.alatoo.edu.kg",
+    "password": "Alatoo@400"
+  },
+  {
+    "id": 52,
+    "name": "Mairykova Meerim",
+    "email": "meerim.mairykova@college.alatoo.edu.kg",
+    "password": "Sabak#564"
+  },
+  {
+    "id": 53,
+    "name": "Mambetsadykova Aizada",
+    "email": "aizada.mambetsadykova@college.alatoo.edu.kg",
+    "password": "Mugalim!612"
+  },
+  {
+    "id": 54,
+    "name": "Mannap uula Nurlanbek",
+    "email": "nurlanbek.mannapuula@college.alatoo.edu.kg",
+    "password": "Ordo$208"
+  },
+  {
+    "id": 55,
+    "name": "Murzalymbekova Kanyshai",
+    "email": "kanyshai.murzalymbekova@college.alatoo.edu.kg",
+    "password": "Ordo!723"
+  },
+  {
+    "id": 56,
+    "name": "Musaev Adil",
+    "email": "adil.musaev@college.alatoo.edu.kg",
+    "password": "Sabak!482"
+  },
+  {
+    "id": 57,
+    "name": "Nazarbaev Farhat",
+    "email": "farhat.nazarbaev@college.alatoo.edu.kg",
+    "password": "Ordo*897"
+  },
+  {
+    "id": 58,
+    "name": "Nazarkulova Nurzhan",
+    "email": "nurzhan.nazarkulova@college.alatoo.edu.kg",
+    "password": "Bilim$713"
+  },
+  {
+    "id": 59,
+    "name": "Nurbek kyzy Akmaral",
+    "email": "akmaral.nurbekkyzy@college.alatoo.edu.kg",
+    "password": "Akyl#119"
+  },
+  {
+    "id": 60,
+    "name": "Nurbekov Mirlan",
+    "email": "mirlan.nurbekov@college.alatoo.edu.kg",
+    "password": "Sabaq$999"
+  },
+  {
+    "id": 61,
+    "name": "Omurkulova Aizada",
+    "email": "aizada.omurkulova@college.alatoo.edu.kg",
+    "password": "Ustoz!159"
+  },
+  {
+    "id": 62,
+    "name": "Orozakhunov Zhenishbek",
+    "email": "zhenishbek.orozakhunov@college.alatoo.edu.kg",
+    "password": "Birimdik#180"
+  },
+  {
+    "id": 63,
+    "name": "Saidalieva Altynai",
+    "email": "altynai.saidalieva@college.alatoo.edu.kg",
+    "password": "Akyl#935"
+  },
+  {
+    "id": 64,
+    "name": "Samatova Gulshaiyr",
+    "email": "gulshaiyr.samatova@college.alatoo.edu.kg",
+    "password": "Ordo!884"
+  },
+  {
+    "id": 65,
+    "name": "Satybaev Dastan",
+    "email": "dastan.satybaev@college.alatoo.edu.kg",
+    "password": "Sabak@775"
+  },
+  {
+    "id": 66,
+    "name": "Seitalieva Zhaigul",
+    "email": "zhaigul.seitalieva@college.alatoo.edu.kg",
+    "password": "Ordo$269"
+  },
+  {
+    "id": 67,
+    "name": "Shayimbek uulu Azat",
+    "email": "azat.shayimbekuulu@college.alatoo.edu.kg",
+    "password": "Ordo*993"
+  },
+  {
+    "id": 68,
+    "name": "Shermatov Suyun",
+    "email": "suyun.shermatov@college.alatoo.edu.kg",
+    "password": "Kadam*316"
+  },
+  {
+    "id": 69,
+    "name": "Supaeva Aida",
+    "email": "aida.supaeva@college.alatoo.edu.kg",
+    "password": "Ustoz$830"
+  },
+  {
+    "id": 70,
+    "name": "Taalaibekova Ykyval",
+    "email": "ykyval.taalaibekova@college.alatoo.edu.kg",
+    "password": "Kadam$787"
+  },
+  {
+    "id": 71,
+    "name": "Tashtanov Mederbek",
+    "email": "mederbek.tashtanov@college.alatoo.edu.kg",
+    "password": "Akyl@629"
+  },
+  {
+    "id": 72,
+    "name": "Toktosunova Aiperi",
+    "email": "aiperi.toktosunova@college.alatoo.edu.kg",
+    "password": "Alatoo!353"
+  },
+  {
+    "id": 73,
+    "name": "Uraimzhan kyzy Akylai",
+    "email": "akylai.uraimzhankyzy@college.alatoo.edu.kg",
+    "password": "Alatoo#446"
+  },
+  {
+    "id": 74,
+    "name": "Usupova Nurzat",
+    "email": "nurzat.usupova@college.alatoo.edu.kg",
+    "password": "Birimdik!667"
+  },
+  {
+    "id": 75,
+    "name": "Wajiha Batul",
+    "email": "batul.wajiha@college.alatoo.edu.kg",
+    "password": "Birimdik#325"
+  },
+  {
+    "id": 76,
+    "name": "Yalchinkaya Irina",
+    "email": "irina.yalchinkaya@college.alatoo.edu.kg",
+    "password": "Alatoo#824"
+  },
+  {
+    "id": 77,
+    "name": "Zholdoshbekov Emilbek",
+    "email": "emilbek.zholdoshbekov@college.alatoo.edu.kg",
+    "password": "Ustoz#169"
+  },
+  {
+    "id": 78,
+    "name": "Zhoroev Arzymat",
+    "email": "arzymat.zhoroev@college.alatoo.edu.kg",
+    "password": "Sabaq*172"
+  }
+];
+
+    let currentTeacher = null;
+    let typedPassword = '';
+    let isPwdVisible = false;
+
+    // Бишкек убактысы
+    setInterval(() => {
+      document.getElementById('clock').innerText = new Date().toLocaleTimeString('ru-RU');
+    }, 1000);
+
+    // Карточкаларды чыгаруу
+    function renderTeachers(list) {
+      const grid = document.getElementById('teachersGrid');
+      grid.innerHTML = '';
+      document.getElementById('teacherCount').innerText = list.length;
+
+      list.forEach(t => {
+        const card = document.createElement('div');
+        card.className = "bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl border border-slate-200 cursor-pointer active:scale-95 transition-all flex items-center justify-between";
+        card.onclick = () => openPwdModal(t);
+
+        const initial = t.name ? t.name[0].toUpperCase() : 'M';
+        card.innerHTML = `
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 bg-blue-100 text-blue-800 font-black text-2xl rounded-2xl flex items-center justify-center shadow-inner">
+              ${initial}
+            </div>
+            <div>
+              <h4 class="text-2xl font-bold text-slate-900 leading-tight">${t.name}</h4>
+              <p class="text-slate-400 text-sm mt-1">Окутуучу</p>
+            </div>
+          </div>
+          <div class="text-slate-300">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Алфавиттик тилке
+    function buildAlphabet() {
+      const letters = [...new Set(teachersData.map(t => t.name[0].toUpperCase()))].sort();
+      const container = document.getElementById('alphabetList');
+      container.innerHTML = `
+        <button onclick="renderTeachers(teachersData)" class="px-3.5 py-1.5 bg-blue-600 text-white font-bold rounded-xl text-sm">Баары</button>
+      `;
+      letters.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.className = "px-3 py-1.5 bg-slate-100 hover:bg-blue-100 text-slate-800 font-bold rounded-xl text-sm transition-all";
+        btn.innerText = letter;
+        btn.onclick = () => {
+          const filtered = teachersData.filter(t => t.name.toUpperCase().startsWith(letter));
+          renderTeachers(filtered);
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // Издөө
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = teachersData.filter(t => t.name.toLowerCase().includes(q));
+      renderTeachers(filtered);
+    });
+
+    // Пароль модалкасы
+    function openPwdModal(teacher) {
+      currentTeacher = teacher;
+      typedPassword = '';
+      updatePwdDisplay();
+      document.getElementById('pwdError').classList.add('hidden');
+      document.getElementById('pwdModalTeacherName').innerText = teacher.name;
+      document.getElementById('pwdModal').classList.remove('hidden');
+    }
+
+    function cancelPwdModal() {
+      document.getElementById('pwdModal').classList.add('hidden');
+      currentTeacher = null;
+      typedPassword = '';
+    }
+
+    function pressKey(char) {
+      typedPassword += char;
+      updatePwdDisplay();
+    }
+
+    function pressWord(word) {
+      typedPassword += word;
+      updatePwdDisplay();
+    }
+
+    function deleteKey() {
+      typedPassword = typedPassword.slice(0, -1);
+      updatePwdDisplay();
+    }
+
+    function togglePwdVisibility() {
+      isPwdVisible = !isPwdVisible;
+      const inp = document.getElementById('pwdInput');
+      inp.type = isPwdVisible ? 'text' : 'password';
+    }
+
+    function updatePwdDisplay() {
+      document.getElementById('pwdInput').value = typedPassword;
+    }
+
+    function submitPassword() {
+      if (!currentTeacher) return;
+      if (typedPassword === currentTeacher.password) {
+        document.getElementById('pwdModal').classList.add('hidden');
+        showFolder(currentTeacher);
+      } else {
+        const err = document.getElementById('pwdError');
+        err.innerText = 'Ката сыр сөз! Сураныч, кайра териңиз.';
+        err.classList.remove('hidden');
+        typedPassword = '';
+        updatePwdDisplay();
+      }
+    }
+
+    // Мугалимдин папкасын ачуу
+    function showFolder(teacher) {
+      document.getElementById('mainGridSection').classList.add('hidden');
+      document.getElementById('folderView').classList.remove('hidden');
+      document.getElementById('activeTeacherName').innerText = teacher.name;
+      document.getElementById('activeTeacherEmail').innerText = teacher.email;
+      loadSavedFiles(teacher.id);
+    }
+
+    function closeFolder() {
+      document.getElementById('folderView').classList.add('hidden');
+      document.getElementById('mainGridSection').classList.remove('hidden');
+      currentTeacher = null;
+      typedPassword = '';
+    }
+
+    // Локалдык файл жүктөө (IndexedDB / LocalStorage сыноо үчүн)
+    function uploadLocalFile(event) {
+      const files = event.target.files;
+      if (!files.length || !currentTeacher) return;
+
+      const storeKey = `files_teacher_${currentTeacher.id}`;
+      let saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
+
+      for (let i = 0; i < files.length; i++) {
+        saved.push({
+          name: files[i].name,
+          size: (files[i].size / (1024 * 1024)).toFixed(2) + ' MB',
+          date: new Date().toLocaleDateString()
+        });
+      }
+
+      localStorage.setItem(storeKey, JSON.stringify(saved));
+      loadSavedFiles(currentTeacher.id);
+      event.target.value = '';
+    }
+
+    function loadSavedFiles(teacherId) {
+      const storeKey = `files_teacher_${teacherId}`;
+      const saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
+      const list = document.getElementById('fileList');
+      list.innerHTML = '';
+
+      if (saved.length === 0) {
+        list.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 text-2xl font-bold">Бул папкада азырынча файл жок. Жогорудагы баскычты басып презентация жүктөңүз.</div>`;
+        return;
+      }
+
+      saved.forEach((f, idx) => {
+        const card = document.createElement('div');
+        card.className = "bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold mb-3">PPT</div>
+            <h5 class="text-xl font-bold text-slate-800 break-words mb-1">${f.name}</h5>
+            <p class="text-slate-400 text-sm">${f.size} • ${f.date}</p>
+          </div>
+          <div class="mt-6 flex gap-3">
+            <button onclick="alert('Сабакта экранга чыгаруу режими сыноодон өтүп жатат!')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold">Сабакта ачуу</button>
+            <button onclick="deleteSavedFile(${teacherId}, ${idx})" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-4 py-3.5 rounded-xl font-bold">🗑</button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function deleteSavedFile(teacherId, idx) {
+      const storeKey = `files_teacher_${teacherId}`;
+      let saved = JSON.parse(localStorage.getItem(storeKey) || '[]');
+      saved.splice(idx, 1);
+      localStorage.setItem(storeKey, JSON.stringify(saved));
+      loadSavedFiles(teacherId);
+    }
+
+    // Реестр паролей
+    function toggleRegistryModal(show) {
+      const modal = document.getElementById('registryModal');
+      if (show) {
+        const tbody = document.getElementById('registryTableBody');
+        tbody.innerHTML = '';
+        teachersData.forEach((t, i) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="p-3 text-slate-400 font-bold">${i + 1}</td>
+            <td class="p-3 font-bold text-slate-800">${t.name}</td>
+            <td class="p-3 text-slate-500">${t.email}</td>
+            <td class="p-3 text-blue-600 font-mono font-bold text-base bg-blue-50/50">${t.password}</td>
+          `;
+          tbody.appendChild(row);
+        });
+        modal.classList.remove('hidden');
+      } else {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function copyAllPasswords() {
+      const text = teachersData.map(t => `${t.name}\t${t.email}\t${t.password}`).join('\n');
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Бардык 78 сыр сөз көчүрүлдү!');
+      });
+    }
+
+    // Баштапкы жүктөө
+    renderTeachers(teachersData);
+    buildAlphabet();
+  </script>
+</body>
+</html>
