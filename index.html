@@ -104,6 +104,20 @@
     <div id="fileList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
+  <!-- ПОДВАЛ САЙТА (РАЗРАБОТЧИК) -->
+  <footer class="bg-white border-t border-slate-200 py-6 px-8 text-center mt-auto shadow-inner">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-sm font-medium">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 bg-blue-600 rounded-full"></span>
+        <span>© 2026 Ала-Тоо Колледжи • Смарт-панель порталы</span>
+      </div>
+      <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl shadow-sm">
+        <span class="text-slate-400" data-i18n="devLabel">Иштеп чыккан:</span>
+        <span class="font-bold text-slate-800 tracking-wide">Сүйүнбек Шерматов</span>
+      </div>
+    </div>
+  </footer>
+
   <!-- МОДАЛЬ ВВОДА ПАРОЛЯ -->
   <div id="pwdModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
@@ -301,97 +315,97 @@
       });
     }
 
-    // БАЗА ДАННЫХ 78 ПРЕПОДАВАТЕЛЕЙ
+    // БАЗА ДАННЫХ 78 ПРЕПОДАВАТЕЛЕЙ (ПАРОЛЬ: ИМЯ+$333)
     const defaultTeachersData = [
-  { "id": 1, "name": "Adil Musaev", "email": "adil.musaev@alatoo.edu.kg", "password": "Sabak!482" },
-  { "id": 2, "name": "Aida Abdyrazak", "email": "aida.abdyrazak@alatoo.edu.kg", "password": "Alatoo*792" },
-  { "id": 3, "name": "Aida Supaeva", "email": "aida.supaeva@alatoo.edu.kg", "password": "Ustoz$830" },
-  { "id": 4, "name": "Aidana Abylova", "email": "aidana.abylova@alatoo.edu.kg", "password": "Bilim#130" },
-  { "id": 5, "name": "Aidar Asakeev", "email": "aidar.asakeev@alatoo.edu.kg", "password": "Alatoo$467" },
-  { "id": 6, "name": "Aigerim Akusheva", "email": "aigerim.akusheva@alatoo.edu.kg", "password": "Ustoz*338" },
-  { "id": 7, "name": "Aigul Ilebaeva", "email": "aigul.ilebaeva@alatoo.edu.kg", "password": "Bilim#334" },
-  { "id": 8, "name": "Ainazik Atabaeva", "email": "ainazik.atabaeva@alatoo.edu.kg", "password": "Birimdik#370" },
-  { "id": 9, "name": "Ainura Dyikanova", "email": "ainura.dyikanova@alatoo.edu.kg", "password": "Alatoo!723" },
-  { "id": 10, "name": "Aiperi Toktosunova", "email": "aiperi.toktosunova@alatoo.edu.kg", "password": "Alatoo!353" },
-  { "id": 11, "name": "Aizada Mambetsadykova", "email": "aizada.mambetsadykova@alatoo.edu.kg", "password": "Mugalim!612" },
-  { "id": 12, "name": "Aizada Omurkulova", "email": "aizada.omurkulova@alatoo.edu.kg", "password": "Ustoz!159" },
-  { "id": 13, "name": "Aizhamal Imankulova", "email": "aizhamal.imankulova@alatoo.edu.kg", "password": "Ustoz*862" },
-  { "id": 14, "name": "Akmaral Nurbek kyzy", "email": "akmaral.nurbekkyzy@alatoo.edu.kg", "password": "Akyl#119" },
-  { "id": 15, "name": "Akylai Uraimzhan kyzy", "email": "akylai.uraimzhankyzy@alatoo.edu.kg", "password": "Alatoo#446" },
-  { "id": 16, "name": "Aliia Abdralieva", "email": "aliia.abdralieva@alatoo.edu.kg", "password": "Ustoz!328" },
-  { "id": 17, "name": "Aliya Abdraeva", "email": "aliya.abdraeva@alatoo.edu.kg", "password": "Alatoo$125" },
-  { "id": 18, "name": "Altynai Saidalieva", "email": "altynai.saidalieva@alatoo.edu.kg", "password": "Akyl#935" },
-  { "id": 19, "name": "Amanbek Checheibaev", "email": "amanbek.checheibaev@alatoo.edu.kg", "password": "Mugalim!181" },
-  { "id": 20, "name": "Arzymat Zhoroev", "email": "arzymat.zhoroev@alatoo.edu.kg", "password": "Sabaq*172" },
-  { "id": 21, "name": "Azat Shayimbek uulu", "email": "azat.shayimbekuulu@alatoo.edu.kg", "password": "Ordo*993" },
-  { "id": 22, "name": "Azimkhan Bolotbekov", "email": "azimkhan.bolotbekov@alatoo.edu.kg", "password": "Sabaq!324" },
-  { "id": 23, "name": "Azizbek Karimov", "email": "azizbek.karimov@alatoo.edu.kg", "password": "Bilim#981" },
-  { "id": 24, "name": "Baktygul Abekova", "email": "baktygul.abekova@alatoo.edu.kg", "password": "Alatoo@704" },
-  { "id": 25, "name": "Baktygul Batyralieva", "email": "baktygul.batyralieva@alatoo.edu.kg", "password": "Mugalim*949" },
-  { "id": 26, "name": "Batul Wajiha", "email": "batul.wajiha@alatoo.edu.kg", "password": "Birimdik#325" },
-  { "id": 27, "name": "Bekmyrza Alyshbaev", "email": "bekmyrza.alyshbaev@alatoo.edu.kg", "password": "Sabak@814" },
-  { "id": 28, "name": "Bekmyrza Bakalchiev", "email": "bekmyrza.bakalchiev@alatoo.edu.kg", "password": "Kadam*180" },
-  { "id": 29, "name": "C Chokusheva", "email": "c.chokusheva@alatoo.edu.kg", "password": "Alatoo$489" },
-  { "id": 30, "name": "Dastan Satybaev", "email": "dastan.satybaev@alatoo.edu.kg", "password": "Sabak@775" },
-  { "id": 31, "name": "Dosbol Aliev", "email": "dosbol.aliev@alatoo.edu.kg", "password": "Ustoz*833" },
-  { "id": 32, "name": "Eldar Jorobekov", "email": "eldar.jorobekov@alatoo.edu.kg", "password": "Ordo#605" },
-  { "id": 33, "name": "Emilbek Zholdoshbekov", "email": "emilbek.zholdoshbekov@alatoo.edu.kg", "password": "Ustoz#169" },
-  { "id": 34, "name": "Erbol Bolushov", "email": "erbol.bolushov@alatoo.edu.kg", "password": "Alatoo!146" },
-  { "id": 35, "name": "Erustan Agai", "email": "erustan.agai@alatoo.edu.kg", "password": "Ustoz$801" },
-  { "id": 36, "name": "Evgenii Badilovskii", "email": "evgenii.badilovskii@alatoo.edu.kg", "password": "Akyl#649" },
-  { "id": 37, "name": "Farhat Nazarbaev", "email": "farhat.nazarbaev@alatoo.edu.kg", "password": "Ordo*897" },
-  { "id": 38, "name": "Feruza Kubanychbek kyzy", "email": "feruza.kubanychbekkyzy@alatoo.edu.kg", "password": "Alatoo*798" },
-  { "id": 39, "name": "Gulnura Dyikanbaeva", "email": "gulnura.dyikanbaeva@alatoo.edu.kg", "password": "Ustoz$786" },
-  { "id": 40, "name": "Gulshaiyr Samatova", "email": "gulshaiyr.samatova@alatoo.edu.kg", "password": "Ordo!884" },
-  { "id": 41, "name": "Irina Yalchinkaya", "email": "irina.yalchinkaya@alatoo.edu.kg", "password": "Alatoo#824" },
-  { "id": 42, "name": "Irshad Gulbarga", "email": "irshad.gulbarga@alatoo.edu.kg", "password": "Alatoo*316" },
-  { "id": 43, "name": "Iskender Kochkorbaev", "email": "iskender.kochkorbaev@alatoo.edu.kg", "password": "Ordo#981" },
-  { "id": 44, "name": "Kamila Ibraimova", "email": "kamila.ibraimova@alatoo.edu.kg", "password": "Kadam@758" },
-  { "id": 45, "name": "Kanyshai Murzalymbekova", "email": "kanyshai.murzalymbekova@alatoo.edu.kg", "password": "Ordo!723" },
-  { "id": 46, "name": "Khadidzha Khazhzhazh", "email": "khadidzha.khazhzhazh@alatoo.edu.kg", "password": "Akyl$641" },
-  { "id": 47, "name": "Kubanych Dzhyrgalbekov", "email": "kubanych.dzhyrgalbekov@alatoo.edu.kg", "password": "Sabak@573" },
-  { "id": 48, "name": "Larisa Alimpieva", "email": "larisa.alimpieva@alatoo.edu.kg", "password": "Kadam@325" },
-  { "id": 49, "name": "Leila Ibragimova", "email": "leila.ibragimova@alatoo.edu.kg", "password": "Sabaq@317" },
-  { "id": 50, "name": "Mairam Kenzhebek kyzy", "email": "mairam.kenzhebekkyzy@alatoo.edu.kg", "password": "Kadam*490" },
-  { "id": 51, "name": "Mederbek Tashtanov", "email": "mederbek.tashtanov@alatoo.edu.kg", "password": "Akyl@629" },
-  { "id": 52, "name": "Meerim Mairykova", "email": "meerim.mairykova@alatoo.edu.kg", "password": "Sabak#564" },
-  { "id": 53, "name": "Mirlan Nurbekov", "email": "mirlan.nurbekov@alatoo.edu.kg", "password": "Sabaq$999" },
-  { "id": 54, "name": "Murat Dzhaparov", "email": "murat.dzhaparov@alatoo.edu.kg", "password": "Ordo!846" },
-  { "id": 55, "name": "Nargiza Kutmanova", "email": "nargiza.kutmanova@alatoo.edu.kg", "password": "Alatoo@400" },
-  { "id": 56, "name": "Nazarbek Akylbek uulu", "email": "nazarbek.akylbekuulu@alatoo.edu.kg", "password": "Birimdik*127" },
-  { "id": 57, "name": "Nicholas Andersen", "email": "nicholas.andersen@alatoo.edu.kg", "password": "Ustoz$881" },
-  { "id": 58, "name": "Nurlanbek Mannap uulu", "email": "nurlanbek.mannapuulu@alatoo.edu.kg", "password": "Ordo$208" },
-  { "id": 59, "name": "Nurzada Baktybekova", "email": "nurzada.baktybekova@alatoo.edu.kg", "password": "Sabak!371" },
-  { "id": 60, "name": "Nurzada Ergeshova", "email": "nurzada.ergeshova@alatoo.edu.kg", "password": "Mugalim*755" },
-  { "id": 61, "name": "Nurzada Kartaeva", "email": "nurzada.kartaeva@alatoo.edu.kg", "password": "Sabak!742" },
-  { "id": 62, "name": "Nurzat Usupova", "email": "nurzat.usupova@alatoo.edu.kg", "password": "Birimdik!667" },
-  { "id": 63, "name": "Nurzhan Nazarkulova", "email": "nurzhan.nazarkulova@alatoo.edu.kg", "password": "Bilim$713" },
-  { "id": 64, "name": "Quintin Gay", "email": "quintin.gay@alatoo.edu.kg", "password": "Sabaq$510" },
-  { "id": 65, "name": "Raushan Belekova", "email": "raushan.belekova@alatoo.edu.kg", "password": "Sabaq!691" },
-  { "id": 66, "name": "Salidat Isaeva", "email": "salidat.isaeva@alatoo.edu.kg", "password": "Kadam@697" },
-  { "id": 67, "name": "Saliia Kurmanova", "email": "saliia.kurmanova@alatoo.edu.kg", "password": "Mugalim$887" },
-  { "id": 68, "name": "Saltanat Derkenbaeva", "email": "saltanat.derkenbaeva@alatoo.edu.kg", "password": "Sabak$479" },
-  { "id": 69, "name": "Saodat Amanbaeva", "email": "saodat.amanbaeva@alatoo.edu.kg", "password": "Sabaq!384" },
-  { "id": 70, "name": "Sm Alymbekova", "email": "sm.alymbekova@alatoo.edu.kg", "password": "Birimdik#384" },
-  { "id": 71, "name": "Suiunbek Shermatov", "email": "suiunbek.shermatov@alatoo.edu.kg", "password": "Kadam*316" },
-  { "id": 72, "name": "Talant Arystanov", "email": "talant.arystanov@alatoo.edu.kg", "password": "Alatoo@194" },
-  { "id": 73, "name": "Ykyval Taalaibekova", "email": "ykyval.taalaibekova@alatoo.edu.kg", "password": "Kadam$787" },
-  { "id": 74, "name": "Zamir Chynybekov", "email": "zamir.chynybekov@alatoo.edu.kg", "password": "Akyl$750" },
-  { "id": 75, "name": "Zhaigul Seitalieva", "email": "zhaigul.seitalieva@alatoo.edu.kg", "password": "Ordo$269" },
-  { "id": 76, "name": "Zhenishbek Orozakhunov", "email": "zhenishbek.orozakhunov@alatoo.edu.kg", "password": "Birimdik#180" },
-  { "id": 77, "name": "Zhyldyz Indigaraeva", "email": "zhyldyz.indigaraeva@alatoo.edu.kg", "password": "Ordo*369" },
-  { "id": 78, "name": "Zhyldyz Kayipberdieva", "email": "zhyldyz.kayipberdieva@alatoo.edu.kg", "password": "Kadam#710" }
-];
+      { "id": 1, "name": "Adil Musaev", "email": "adil.musaev@alatoo.edu.kg", "password": "Adil$333" },
+      { "id": 2, "name": "Aida Abdyrazak", "email": "aida.abdyrazak@alatoo.edu.kg", "password": "Aida$333" },
+      { "id": 3, "name": "Aida Supaeva", "email": "aida.supaeva@alatoo.edu.kg", "password": "Aida$333" },
+      { "id": 4, "name": "Aidana Abylova", "email": "aidana.abylova@alatoo.edu.kg", "password": "Aidana$333" },
+      { "id": 5, "name": "Aidar Asakeev", "email": "aidar.asakeev@alatoo.edu.kg", "password": "Aidar$333" },
+      { "id": 6, "name": "Aigerim Akusheva", "email": "aigerim.akusheva@alatoo.edu.kg", "password": "Aigerim$333" },
+      { "id": 7, "name": "Aigul Ilebaeva", "email": "aigul.ilebaeva@alatoo.edu.kg", "password": "Aigul$333" },
+      { "id": 8, "name": "Ainazik Atabaeva", "email": "ainazik.atabaeva@alatoo.edu.kg", "password": "Ainazik$333" },
+      { "id": 9, "name": "Ainura Dyikanova", "email": "ainura.dyikanova@alatoo.edu.kg", "password": "Ainura$333" },
+      { "id": 10, "name": "Aiperi Toktosunova", "email": "aiperi.toktosunova@alatoo.edu.kg", "password": "Aiperi$333" },
+      { "id": 11, "name": "Aizada Mambetsadykova", "email": "aizada.mambetsadykova@alatoo.edu.kg", "password": "Aizada$333" },
+      { "id": 12, "name": "Aizada Omurkulova", "email": "aizada.omurkulova@alatoo.edu.kg", "password": "Aizada$333" },
+      { "id": 13, "name": "Aizhamal Imankulova", "email": "aizhamal.imankulova@alatoo.edu.kg", "password": "Aizhamal$333" },
+      { "id": 14, "name": "Akmaral Nurbek kyzy", "email": "akmaral.nurbekkyzy@alatoo.edu.kg", "password": "Akmaral$333" },
+      { "id": 15, "name": "Akylai Uraimzhan kyzy", "email": "akylai.uraimzhankyzy@alatoo.edu.kg", "password": "Akylai$333" },
+      { "id": 16, "name": "Aliia Abdralieva", "email": "aliia.abdralieva@alatoo.edu.kg", "password": "Aliia$333" },
+      { "id": 17, "name": "Aliya Abdraeva", "email": "aliya.abdraeva@alatoo.edu.kg", "password": "Aliya$333" },
+      { "id": 18, "name": "Altynai Saidalieva", "email": "altynai.saidalieva@alatoo.edu.kg", "password": "Altynai$333" },
+      { "id": 19, "name": "Amanbek Checheibaev", "email": "amanbek.checheibaev@alatoo.edu.kg", "password": "Amanbek$333" },
+      { "id": 20, "name": "Arzymat Zhoroev", "email": "arzymat.zhoroev@alatoo.edu.kg", "password": "Arzymat$333" },
+      { "id": 21, "name": "Azat Shayimbek uulu", "email": "azat.shayimbekuulu@alatoo.edu.kg", "password": "Azat$333" },
+      { "id": 22, "name": "Azimkhan Bolotbekov", "email": "azimkhan.bolotbekov@alatoo.edu.kg", "password": "Azimkhan$333" },
+      { "id": 23, "name": "Azizbek Karimov", "email": "azizbek.karimov@alatoo.edu.kg", "password": "Azizbek$333" },
+      { "id": 24, "name": "Baktygul Abekova", "email": "baktygul.abekova@alatoo.edu.kg", "password": "Baktygul$333" },
+      { "id": 25, "name": "Baktygul Batyralieva", "email": "baktygul.batyralieva@alatoo.edu.kg", "password": "Baktygul$333" },
+      { "id": 26, "name": "Batul Wajiha", "email": "batul.wajiha@alatoo.edu.kg", "password": "Batul$333" },
+      { "id": 27, "name": "Bekmyrza Alyshbaev", "email": "bekmyrza.alyshbaev@alatoo.edu.kg", "password": "Bekmyrza$333" },
+      { "id": 28, "name": "Bekmyrza Bakalchiev", "email": "bekmyrza.bakalchiev@alatoo.edu.kg", "password": "Bekmyrza$333" },
+      { "id": 29, "name": "C Chokusheva", "email": "c.chokusheva@alatoo.edu.kg", "password": "C$333" },
+      { "id": 30, "name": "Dastan Satybaev", "email": "dastan.satybaev@alatoo.edu.kg", "password": "Dastan$333" },
+      { "id": 31, "name": "Dosbol Aliev", "email": "dosbol.aliev@alatoo.edu.kg", "password": "Dosbol$333" },
+      { "id": 32, "name": "Eldar Jorobekov", "email": "eldar.jorobekov@alatoo.edu.kg", "password": "Eldar$333" },
+      { "id": 33, "name": "Emilbek Zholdoshbekov", "email": "emilbek.zholdoshbekov@alatoo.edu.kg", "password": "Emilbek$333" },
+      { "id": 34, "name": "Erbol Bolushov", "email": "erbol.bolushov@alatoo.edu.kg", "password": "Erbol$333" },
+      { "id": 35, "name": "Erustan Agai", "email": "erustan.agai@alatoo.edu.kg", "password": "Erustan$333" },
+      { "id": 36, "name": "Evgenii Badilovskii", "email": "evgenii.badilovskii@alatoo.edu.kg", "password": "Evgenii$333" },
+      { "id": 37, "name": "Farhat Nazarbaev", "email": "farhat.nazarbaev@alatoo.edu.kg", "password": "Farhat$333" },
+      { "id": 38, "name": "Feruza Kubanychbek kyzy", "email": "feruza.kubanychbekkyzy@alatoo.edu.kg", "password": "Feruza$333" },
+      { "id": 39, "name": "Gulnura Dyikanbaeva", "email": "gulnura.dyikanbaeva@alatoo.edu.kg", "password": "Gulnura$333" },
+      { "id": 40, "name": "Gulshaiyr Samatova", "email": "gulshaiyr.samatova@alatoo.edu.kg", "password": "Gulshaiyr$333" },
+      { "id": 41, "name": "Irina Yalchinkaya", "email": "irina.yalchinkaya@alatoo.edu.kg", "password": "Irina$333" },
+      { "id": 42, "name": "Irshad Gulbarga", "email": "irshad.gulbarga@alatoo.edu.kg", "password": "Irshad$333" },
+      { "id": 43, "name": "Iskender Kochkorbaev", "email": "iskender.kochkorbaev@alatoo.edu.kg", "password": "Iskender$333" },
+      { "id": 44, "name": "Kamila Ibraimova", "email": "kamila.ibraimova@alatoo.edu.kg", "password": "Kamila$333" },
+      { "id": 45, "name": "Kanyshai Murzalymbekova", "email": "kanyshai.murzalymbekova@alatoo.edu.kg", "password": "Kanyshai$333" },
+      { "id": 46, "name": "Khadidzha Khazhzhazh", "email": "khadidzha.khazhzhazh@alatoo.edu.kg", "password": "Khadidzha$333" },
+      { "id": 47, "name": "Kubanych Dzhyrgalbekov", "email": "kubanych.dzhyrgalbekov@alatoo.edu.kg", "password": "Kubanych$333" },
+      { "id": 48, "name": "Larisa Alimpieva", "email": "larisa.alimpieva@alatoo.edu.kg", "password": "Larisa$333" },
+      { "id": 49, "name": "Leila Ibragimova", "email": "leila.ibragimova@alatoo.edu.kg", "password": "Leila$333" },
+      { "id": 50, "name": "Mairam Kenzhebek kyzy", "email": "mairam.kenzhebekkyzy@alatoo.edu.kg", "password": "Mairam$333" },
+      { "id": 51, "name": "Mederbek Tashtanov", "email": "mederbek.tashtanov@alatoo.edu.kg", "password": "Mederbek$333" },
+      { "id": 52, "name": "Meerim Mairykova", "email": "meerim.mairykova@alatoo.edu.kg", "password": "Meerim$333" },
+      { "id": 53, "name": "Mirlan Nurbekov", "email": "mirlan.nurbekov@alatoo.edu.kg", "password": "Mirlan$333" },
+      { "id": 54, "name": "Murat Dzhaparov", "email": "murat.dzhaparov@alatoo.edu.kg", "password": "Murat$333" },
+      { "id": 55, "name": "Nargiza Kutmanova", "email": "nargiza.kutmanova@alatoo.edu.kg", "password": "Nargiza$333" },
+      { "id": 56, "name": "Nazarbek Akylbek uulu", "email": "nazarbek.akylbekuulu@alatoo.edu.kg", "password": "Nazarbek$333" },
+      { "id": 57, "name": "Nicholas Andersen", "email": "nicholas.andersen@alatoo.edu.kg", "password": "Nicholas$333" },
+      { "id": 58, "name": "Nurlanbek Mannap uulu", "email": "nurlanbek.mannapuulu@alatoo.edu.kg", "password": "Nurlanbek$333" },
+      { "id": 59, "name": "Nurzada Baktybekova", "email": "nurzada.baktybekova@alatoo.edu.kg", "password": "Nurzada$333" },
+      { "id": 60, "name": "Nurzada Ergeshova", "email": "nurzada.ergeshova@alatoo.edu.kg", "password": "Nurzada$333" },
+      { "id": 61, "name": "Nurzada Kartaeva", "email": "nurzada.kartaeva@alatoo.edu.kg", "password": "Nurzada$333" },
+      { "id": 62, "name": "Nurzat Usupova", "email": "nurzat.usupova@alatoo.edu.kg", "password": "Nurzat$333" },
+      { "id": 63, "name": "Nurzhan Nazarkulova", "email": "nurzhan.nazarkulova@alatoo.edu.kg", "password": "Nurzhan$333" },
+      { "id": 64, "name": "Quintin Gay", "email": "quintin.gay@alatoo.edu.kg", "password": "Quintin$333" },
+      { "id": 65, "name": "Raushan Belekova", "email": "raushan.belekova@alatoo.edu.kg", "password": "Raushan$333" },
+      { "id": 66, "name": "Salidat Isaeva", "email": "salidat.isaeva@alatoo.edu.kg", "password": "Salidat$333" },
+      { "id": 67, "name": "Saliia Kurmanova", "email": "saliia.kurmanova@alatoo.edu.kg", "password": "Saliia$333" },
+      { "id": 68, "name": "Saltanat Derkenbaeva", "email": "saltanat.derkenbaeva@alatoo.edu.kg", "password": "Saltanat$333" },
+      { "id": 69, "name": "Saodat Amanbaeva", "email": "saodat.amanbaeva@alatoo.edu.kg", "password": "Saodat$333" },
+      { "id": 70, "name": "Sm Alymbekova", "email": "sm.alymbekova@alatoo.edu.kg", "password": "Sm$333" },
+      { "id": 71, "name": "Suiunbek Shermatov", "email": "suiunbek.shermatov@alatoo.edu.kg", "password": "Suiunbek$333" },
+      { "id": 72, "name": "Talant Arystanov", "email": "talant.arystanov@alatoo.edu.kg", "password": "Talant$333" },
+      { "id": 73, "name": "Ykyval Taalaibekova", "email": "ykyval.taalaibekova@alatoo.edu.kg", "password": "Ykyval$333" },
+      { "id": 74, "name": "Zamir Chynybekov", "email": "zamir.chynybekov@alatoo.edu.kg", "password": "Zamir$333" },
+      { "id": 75, "name": "Zhaigul Seitalieva", "email": "zhaigul.seitalieva@alatoo.edu.kg", "password": "Zhaigul$333" },
+      { "id": 76, "name": "Zhenishbek Orozakhunov", "email": "zhenishbek.orozakhunov@alatoo.edu.kg", "password": "Zhenishbek$333" },
+      { "id": 77, "name": "Zhyldyz Indigaraeva", "email": "zhyldyz.indigaraeva@alatoo.edu.kg", "password": "Zhyldyz$333" },
+      { "id": 78, "name": "Zhyldyz Kayipberdieva", "email": "zhyldyz.kayipberdieva@alatoo.edu.kg", "password": "Zhyldyz$333" }
+    ];
 
     function getStoredTeachers() {
-      const stored = localStorage.getItem('college_teachers_list_v2');
+      const stored = localStorage.getItem('college_teachers_list_v3');
       if (stored) return JSON.parse(stored);
-      localStorage.setItem('college_teachers_list_v2', JSON.stringify(defaultTeachersData));
+      localStorage.setItem('college_teachers_list_v3', JSON.stringify(defaultTeachersData));
       return defaultTeachersData;
     }
 
     let teachersData = getStoredTeachers();
-    const MASTER_ADMIN_PASS = "admin2026";
+    const MASTER_ADMIN_PASS = "5rp2eeph3k";
 
     const translations = {
       kg: {
@@ -432,7 +446,8 @@
         lblPassword: "Сыр сөз (Пароль):",
         btnGenPwd: "🎲 Генерация",
         saveBtn: "Сактоо",
-        daysLeftText: "күн калды"
+        daysLeftText: "күн калды",
+        devLabel: "Иштеп чыккан:"
       },
       ru: {
         appTitle: "Портал учебных материалов",
@@ -472,7 +487,8 @@
         lblPassword: "Секретный пароль:",
         btnGenPwd: "🎲 Генерация",
         saveBtn: "Сохранить",
-        daysLeftText: "дн. осталось"
+        daysLeftText: "дн. осталось",
+        devLabel: "Разработчик:"
       }
     };
 
@@ -744,7 +760,6 @@
       if (file.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
         container.innerHTML = `<img src="${activeObjectUrl}" class="max-h-[85vh] max-w-full object-contain mx-auto rounded-xl shadow-2xl">`;
       } else if (file.name.match(/\.pdf$/i)) {
-        // Сенсорный режим PDF для смарт-доски
         container.innerHTML = `
           <div class="flex flex-col items-center w-full h-full max-h-[88vh]">
             <div class="flex items-center gap-6 bg-slate-900/90 px-8 py-3 rounded-2xl mb-3 text-white border border-slate-700 shadow-xl">
@@ -769,7 +784,6 @@
         };
         fileReader.readAsArrayBuffer(file.blob);
       } else {
-        // PPTX файлы
         container.innerHTML = `
           <div class="text-center py-10 text-white max-w-xl mx-auto space-y-6">
             <div class="text-8xl">📊</div>
@@ -783,7 +797,6 @@
                 <span>PowerPoint'те ачуу</span>
               </a>
             </div>
-            <p class="text-xs text-slate-400">Кеңеш: Презентацияны браузерде дароо барактоо үчүн аны PDF форматында сактап жүктөсөңүз болот.</p>
           </div>
         `;
       }
@@ -908,7 +921,7 @@
         teachersData.push({ id: newId, name, email, password });
       }
 
-      localStorage.setItem('college_teachers_list_v2', JSON.stringify(teachersData));
+      localStorage.setItem('college_teachers_list_v3', JSON.stringify(teachersData));
       closeTeacherEditModal();
       renderAdminRegistry();
       renderTeachers(teachersData);
@@ -920,7 +933,7 @@
       const confirmMsg = currentLang === 'kg' ? `«${name}» тизмеден өчүрүлсүнбү?` : `Удалить преподавателя «${name}» из системы?`;
       if (confirm(confirmMsg)) {
         teachersData = teachersData.filter(t => t.id !== id);
-        localStorage.setItem('college_teachers_list_v2', JSON.stringify(teachersData));
+        localStorage.setItem('college_teachers_list_v3', JSON.stringify(teachersData));
         renderAdminRegistry();
         renderTeachers(teachersData);
         buildAlphabet();
