@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Колледж смарт-панели / Портал материалов</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Встроенный движок PDF для смарт-досок -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -19,7 +18,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans select-none">
 
-  <!-- ЖОГОРКУ ШАПКА -->
+  <!-- ШАПКА -->
   <header class="bg-blue-950 text-white px-8 py-5 flex items-center justify-between shadow-lg sticky top-0 z-40">
     <div class="flex items-center gap-5">
       <div class="bg-blue-600 p-3.5 rounded-2xl shadow-inner">
@@ -37,13 +36,10 @@
         <button onclick="setLanguage('ru')" id="langBtnRU" class="px-4 py-2 rounded-xl font-black text-sm transition-all text-blue-200 hover:text-white">RU</button>
       </div>
 
-      <div id="clock" class="text-3xl font-mono font-black bg-blue-900/90 px-5 py-2 rounded-2xl border border-blue-700 text-amber-300 shadow-inner">
-        00:00:00
-      </div>
+      <div id="clock" class="text-3xl font-mono font-black bg-blue-900/90 px-5 py-2 rounded-2xl border border-blue-700 text-amber-300 shadow-inner">00:00:00</div>
       
       <div class="relative w-72">
-        <input type="text" id="searchInput" placeholder="Мугалимди издөө..." 
-          class="w-full text-lg px-4 py-3 pl-11 rounded-2xl text-slate-900 bg-white shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-400 font-medium">
+        <input type="text" id="searchInput" placeholder="Мугалимди издөө..." class="w-full text-lg px-4 py-3 pl-11 rounded-2xl text-slate-900 bg-white shadow-inner focus:outline-none focus:ring-4 focus:ring-amber-400 font-medium">
         <svg class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
 
@@ -60,19 +56,18 @@
     <div id="alphabetList" class="flex gap-2"></div>
   </div>
 
-  <!-- НЕГИЗГИ ТИЗМЕ -->
+  <!-- СПИСОК УЧИТЕЛЕЙ -->
   <main id="mainGridSection" class="flex-1 p-8 max-w-7xl mx-auto w-full">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-black text-slate-700">
-        <span data-i18n="totalTeachers">Бардык мугалимдер:</span> 
-        <span id="teacherCount" class="text-blue-600 font-extrabold ml-1">0</span>
+        <span data-i18n="totalTeachers">Бардык мугалимдер:</span> <span id="teacherCount" class="text-blue-600 font-extrabold ml-1">0</span>
       </h2>
       <p class="text-slate-400 text-sm" data-i18n="clickHint">Папканы ачуу үчүн өзүңүздүн ысымыңызды басыңыз</p>
     </div>
     <div id="teachersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
   </main>
 
-  <!-- АЧЫЛГАН ПАПКА -->
+  <!-- ПАПКА УЧИТЕЛЯ -->
   <section id="folderView" class="hidden flex-1 p-8 flex flex-col max-w-7xl mx-auto w-full">
     <div class="bg-white p-6 rounded-3xl shadow-lg border border-slate-200 flex items-center justify-between mb-6">
       <div class="flex items-center gap-5">
@@ -91,20 +86,19 @@
       </button>
     </div>
 
-    <!-- Загрузка файла -->
     <div class="bg-blue-50 border-2 border-dashed border-blue-300 rounded-3xl p-6 text-center mb-6">
-      <input type="file" id="fileInput" class="hidden" multiple onchange="uploadLocalFile(event)">
+      <input type="file" id="fileInput" class="hidden" multiple onchange="uploadFileToServer(event)">
       <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl text-2xl font-black shadow-md inline-flex items-center gap-3 active:scale-95">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"></path></svg>
         <span data-i18n="uploadBtn">Жаңы презентация жүктөө (.pdf, .pptx, сүрөт)</span>
       </button>
-      <p id="uploadStatusText" class="text-slate-500 mt-2 text-base font-medium" data-i18n="uploadHint">Файлдар 1 жума (7 күн) сакталат жана автоматтык түрдө тазаланат</p>
+      <p id="uploadStatusText" class="text-slate-500 mt-2 text-base font-medium" data-i18n="uploadHint">Файлдар серверде сакталат</p>
     </div>
 
     <div id="fileList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </section>
 
-  <!-- ПОДВАЛ САЙТА (РАЗРАБОТЧИК) -->
+  <!-- ПОДВАЛ -->
   <footer class="bg-white border-t border-slate-200 py-6 px-8 text-center mt-auto shadow-inner">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-sm font-medium">
       <div class="flex items-center gap-2">
@@ -118,8 +112,8 @@
     </div>
   </footer>
 
-  <!-- МОДАЛЬ ВВОДА ПАРОЛЯ -->
-  <div id="pwdModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+  <!-- МОДАЛЬ ПАРОЛЯ УЧИТЕЛЯ -->
+  <div id="pwdModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
       <div class="w-16 h-16 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
         <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
@@ -129,193 +123,110 @@
 
       <form onsubmit="handlePasswordSubmit(event)">
         <div class="relative mb-5">
-          <input type="password" id="pwdInput" required autocomplete="off" placeholder="••••••••" 
-            class="w-full text-2xl font-mono text-center tracking-wider py-4 px-12 bg-slate-50 rounded-2xl border-2 border-slate-300 focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900 shadow-inner">
+          <input type="password" id="pwdInput" required autocomplete="off" placeholder="••••••••" class="w-full text-2xl font-mono text-center tracking-wider py-4 px-12 bg-slate-50 rounded-2xl border-2 border-slate-300 focus:outline-none focus:border-blue-600 focus:bg-white text-slate-900 shadow-inner">
           <button type="button" onclick="togglePwdVisibility()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-700">
-            <svg id="eyeIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            <svg id="eyeIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
           </button>
         </div>
 
         <div class="flex gap-3">
-          <button type="button" onclick="cancelPwdModal()" class="flex-1 py-4 bg-slate-200 hover:bg-slate-300 font-bold text-lg rounded-2xl text-slate-700 active:scale-95 transition-all" data-i18n="cancelBtn">Жокко чыгаруу</button>
-          <button type="submit" class="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-xl rounded-2xl shadow-lg active:scale-95 transition-all" data-i18n="openBtn">Ачуу (Кирүү)</button>
+          <button type="button" onclick="cancelPwdModal()" class="flex-1 py-4 bg-slate-200 hover:bg-slate-300 font-bold text-lg rounded-2xl text-slate-700" data-i18n="cancelBtn">Жокко чыгаруу</button>
+          <button type="submit" class="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-xl rounded-2xl shadow-lg" data-i18n="openBtn">Ачуу</button>
         </div>
       </form>
-      <p id="pwdError" class="text-rose-600 font-bold mt-4 hidden" data-i18n="pwdError">Ката сыр сөз! Сураныч, кайра териңиз.</p>
+      <p id="pwdError" class="text-rose-600 font-bold mt-4 hidden" data-i18n="pwdError">Ката сыр сөз!</p>
     </div>
   </div>
 
-  <!-- МОДАЛЬ ВХОДА В АДМИНКУ ПО ПАРОЛЮ -->
-  <div id="adminAuthModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+  <!-- АДМИН АВТОРИЗАЦИЯ -->
+  <div id="adminAuthModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center">
-      <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
-        <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-      </div>
       <h3 class="text-2xl font-black text-slate-900 mb-1" data-i18n="adminLoginTitle">Администратордун сыр сөзү</h3>
-      <p class="text-slate-500 text-sm mb-5" data-i18n="adminLoginHint">Башкаруу панелине кирүү үчүн мастер-паролду жазыңыз</p>
-
+      <p class="text-slate-500 text-sm mb-5" data-i18n="adminLoginHint">Мастер-паролду жазыңыз</p>
       <form onsubmit="verifyAdminPass(event)" class="space-y-4">
-        <input type="password" id="adminMasterPassInput" placeholder="Мастер-пароль" required
-          class="w-full text-center text-xl font-mono px-4 py-3.5 bg-slate-100 border border-slate-300 rounded-2xl focus:outline-none focus:ring-4 focus:ring-amber-200">
+        <input type="password" id="adminMasterPassInput" placeholder="Мастер-пароль" required class="w-full text-center text-xl font-mono px-4 py-3.5 bg-slate-100 border border-slate-300 rounded-2xl focus:outline-none">
         <div class="flex gap-2">
           <button type="button" onclick="closeAdminAuthModal()" class="flex-1 py-3.5 bg-slate-200 font-bold rounded-xl" data-i18n="cancelBtn">Жокко чыгаруу</button>
           <button type="submit" class="flex-1 py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black rounded-xl shadow" data-i18n="loginBtn">Кирүү</button>
         </div>
       </form>
-      <p id="adminAuthError" class="text-rose-600 font-bold mt-3 text-sm hidden" data-i18n="adminAuthErrorMsg">Мастер-пароль туура эмес!</p>
+      <p id="adminAuthError" class="text-rose-600 font-bold mt-3 text-sm hidden" data-i18n="adminAuthErrorMsg">Туура эмес пароль!</p>
     </div>
   </div>
 
-  <!-- КАБИНЕТ АДМИНИСТРАТОРА -->
-  <div id="adminPanelModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-6">
+  <!-- АДМИН ПАНЕЛЬ -->
+  <div id="adminPanelModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-6">
     <div class="bg-white rounded-3xl p-8 max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl">
       <div class="flex flex-wrap items-center justify-between pb-4 border-b gap-4">
         <div>
-          <h3 class="text-2xl font-black text-slate-900" data-i18n="adminPanelTitle">Мугалимдерди жана сыр сөздөрдү башкаруу</h3>
-          <p class="text-slate-500 text-sm" data-i18n="adminPanelSubtitle">Мугалимдердин маалыматы, сыр сөздөрү жана түзөтүүлөр</p>
+          <h3 class="text-2xl font-black text-slate-900" data-i18n="adminPanelTitle">Мугалимдерди башкаруу</h3>
         </div>
-        <div class="flex flex-wrap items-center gap-3">
-          <button onclick="openAddTeacherModal()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm shadow flex items-center gap-2">
-            <span>+</span> <span data-i18n="addTeacherBtn">Жаңы мугалим кошуу</span>
-          </button>
-          <button onclick="exportCSV()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm shadow">📥 Excel (CSV)</button>
-          <button onclick="copyAllPasswords()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-sm" data-i18n="copyBtn">Көчүрүп алуу</button>
+        <div class="flex items-center gap-3">
+          <button onclick="openAddTeacherModal()" class="px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl text-sm shadow"><span>+</span> <span data-i18n="addTeacherBtn">Кошуу</span></button>
+          <button onclick="exportCSV()" class="px-4 py-2.5 bg-emerald-600 text-white font-bold rounded-xl text-sm shadow">📥 Excel (CSV)</button>
           <button onclick="closeAdminPanel()" class="text-slate-400 hover:text-slate-700 text-3xl font-bold ml-2">&times;</button>
         </div>
       </div>
-
       <div class="flex-1 overflow-y-auto my-4 border rounded-2xl">
         <table class="w-full text-left border-collapse">
           <thead class="bg-slate-100 text-slate-700 text-sm font-bold sticky top-0">
             <tr>
               <th class="p-3 border-b">№</th>
-              <th class="p-3 border-b" data-i18n="thName">Мугалимдин аты-жөнү</th>
+              <th class="p-3 border-b" data-i18n="thName">Аты-жөнү</th>
               <th class="p-3 border-b" data-i18n="thEmail">Почтасы</th>
-              <th class="p-3 border-b text-blue-700 font-mono" data-i18n="thPassword">Сыр сөз (Пароль)</th>
+              <th class="p-3 border-b text-blue-700 font-mono" data-i18n="thPassword">Сыр сөз</th>
               <th class="p-3 border-b text-right" data-i18n="thActions">Аракеттер</th>
             </tr>
           </thead>
           <tbody id="registryTableBody" class="text-sm divide-y"></tbody>
         </table>
       </div>
-
-      <div class="flex justify-between items-center pt-2">
-        <span class="text-xs text-slate-400" data-i18n="adminNote">Эскертүү: Паролдор купуя сакталышы керек</span>
-        <button onclick="closeAdminPanel()" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl" data-i18n="closeModalBtn">Жабуу</button>
+      <div class="flex justify-end pt-2">
+        <button onclick="closeAdminPanel()" class="px-6 py-2.5 bg-slate-800 text-white font-bold rounded-xl" data-i18n="closeModalBtn">Жабуу</button>
       </div>
     </div>
   </div>
 
-  <!-- МОДАЛЬ ДОБАВЛЕНИЯ / РЕДАКТИРОВАНИЯ УЧИТЕЛЯ -->
-  <div id="teacherEditModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+  <!-- ДОБАВЛЕНИЕ/РЕДАКТИРОВАНИЕ УЧИТЕЛЯ -->
+  <div id="teacherEditModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-slate-200">
       <div class="flex items-center justify-between pb-4 border-b mb-6">
-        <h3 id="editModalTitle" class="text-2xl font-black text-slate-900">Жаңы мугалим кошуу</h3>
-        <button onclick="closeTeacherEditModal()" class="text-slate-400 hover:text-slate-700 text-3xl font-bold">&times;</button>
+        <h3 id="editModalTitle" class="text-2xl font-black text-slate-900">Мугалим кошуу</h3>
+        <button onclick="closeTeacherEditModal()" class="text-slate-400 text-3xl font-bold">&times;</button>
       </div>
-
       <form onsubmit="handleSaveTeacher(event)" class="space-y-4">
         <input type="hidden" id="editTeacherId">
         <div>
-          <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblFullName">Аты-жөнү (ФИО):</label>
-          <input type="text" id="teacherNameInput" required placeholder="Мисалы: Бакыт Асанов" 
-            class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+          <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Аты-жөнү:</label>
+          <input type="text" id="teacherNameInput" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl outline-none">
         </div>
         <div>
-          <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblEmail">Корпоративдик почтасы (Email):</label>
-          <input type="email" id="teacherEmailInput" required placeholder="bakyt.asanov@alatoo.edu.kg" 
-            class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+          <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Email:</label>
+          <input type="email" id="teacherEmailInput" required class="w-full px-4 py-3 bg-slate-50 border rounded-xl outline-none">
         </div>
         <div>
-          <label class="block text-xs font-bold uppercase text-slate-500 mb-1" data-i18n="lblPassword">Сыр сөз (Пароль):</label>
-          <div class="flex gap-2">
-            <input type="text" id="teacherPwdInput" required placeholder="Мисалы: Alatoo#752" 
-              class="flex-1 font-mono text-base px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-            <button type="button" onclick="generateAutoPassword()" class="px-4 bg-slate-100 hover:bg-slate-200 font-bold rounded-xl text-sm border" data-i18n="btnGenPwd">
-              🎲 Генерация
-            </button>
-          </div>
+          <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Сыр сөз:</label>
+          <input type="text" id="teacherPwdInput" required class="w-full font-mono px-4 py-3 bg-slate-50 border rounded-xl outline-none">
         </div>
         <div class="flex gap-3 pt-4 border-t">
-          <button type="button" onclick="closeTeacherEditModal()" class="flex-1 py-3.5 bg-slate-200 hover:bg-slate-300 font-bold rounded-xl text-slate-700" data-i18n="cancelBtn">Жокко чыгаруу</button>
-          <button type="submit" class="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-md" data-i18n="saveBtn">Сактоо</button>
+          <button type="button" onclick="closeTeacherEditModal()" class="flex-1 py-3.5 bg-slate-200 font-bold rounded-xl" data-i18n="cancelBtn">Жокко чыгаруу</button>
+          <button type="submit" class="flex-1 py-3.5 bg-blue-600 text-white font-black rounded-xl" data-i18n="saveBtn">Сактоо</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- ПОЛНОЭКРАННЫЙ СЕНСОРНЫЙ ПРОСМОТРЩИК (PDF / ФОТО / PPTX) -->
+  <!-- ПРОСМОТРЩИК ФАЙЛОВ -->
   <div id="fullViewerModal" class="hidden fixed inset-0 bg-slate-950/95 z-50 flex flex-col p-4">
-    <div class="flex items-center justify-between px-6 py-3 bg-slate-900/90 rounded-2xl border border-slate-800 mb-3">
-      <div class="flex items-center gap-3">
-        <span class="w-3.5 h-3.5 bg-emerald-500 rounded-full animate-pulse"></span>
-        <h4 id="viewerFileName" class="text-xl font-bold text-white tracking-wide truncate max-w-2xl">...</h4>
-      </div>
-      <button onclick="closeViewerModal()" class="bg-rose-600 hover:bg-rose-700 text-white font-black px-6 py-2.5 rounded-xl text-lg shadow-lg active:scale-95 transition-all">
-        ✕ Жабуу / Закрыть
-      </button>
+    <div class="flex items-center justify-between px-6 py-3 bg-slate-900 rounded-2xl mb-3 text-white">
+      <h4 id="viewerFileName" class="text-xl font-bold truncate max-w-2xl">...</h4>
+      <button onclick="closeViewerModal()" class="bg-rose-600 text-white font-black px-6 py-2.5 rounded-xl text-lg">✕ Жабуу</button>
     </div>
     <div id="viewerContent" class="flex-1 w-full h-full flex items-center justify-center overflow-hidden"></div>
   </div>
 
   <script>
-    // INDEXEDDB
-    const DB_NAME = 'CollegeSmartBoardDB';
-    const DB_VERSION = 1;
-    const STORE_NAME = 'teacher_files';
-    const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
-
-    function openDB() {
-      return new Promise((resolve, reject) => {
-        const req = indexedDB.open(DB_NAME, DB_VERSION);
-        req.onupgradeneeded = (e) => {
-          const db = e.target.result;
-          if (!db.objectStoreNames.contains(STORE_NAME)) {
-            db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
-          }
-        };
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
-      });
-    }
-
-    async function dbSaveFile(record) {
-      const db = await openDB();
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        const store = tx.objectStore(STORE_NAME);
-        const req = store.add(record);
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
-      });
-    }
-
-    async function dbGetFilesByTeacher(teacherId) {
-      const db = await openDB();
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readonly');
-        const store = tx.objectStore(STORE_NAME);
-        const req = store.getAll();
-        req.onsuccess = () => {
-          const all = req.result || [];
-          resolve(all.filter(f => f.teacherId === teacherId));
-        };
-        req.onerror = () => reject(req.error);
-      });
-    }
-
-    async function dbDeleteFile(fileId) {
-      const db = await openDB();
-      return new Promise((resolve, reject) => {
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        const store = tx.objectStore(STORE_NAME);
-        const req = store.delete(fileId);
-        req.onsuccess = () => resolve(true);
-        req.onerror = () => reject(req.error);
-      });
-    }
-
-    // БАЗА ДАННЫХ 78 ПРЕПОДАВАТЕЛЕЙ (ПАРОЛЬ: ИМЯ+$333)
+    // 78 ПРЕПОДАВАТЕЛЕЙ (ИМЯ + $333)
     const defaultTeachersData = [
       { "id": 1, "name": "Adil Musaev", "email": "adil.musaev@alatoo.edu.kg", "password": "Adil$333" },
       { "id": 2, "name": "Aida Abdyrazak", "email": "aida.abdyrazak@alatoo.edu.kg", "password": "Aida$333" },
@@ -398,14 +309,16 @@
     ];
 
     function getStoredTeachers() {
-      const stored = localStorage.getItem('college_teachers_list_v3');
+      const stored = localStorage.getItem('college_teachers_list_php_v1');
       if (stored) return JSON.parse(stored);
-      localStorage.setItem('college_teachers_list_v3', JSON.stringify(defaultTeachersData));
+      localStorage.setItem('college_teachers_list_php_v1', JSON.stringify(defaultTeachersData));
       return defaultTeachersData;
     }
 
     let teachersData = getStoredTeachers();
     const MASTER_ADMIN_PASS = "5rp2eeph3k";
+    let currentLang = 'kg';
+    let currentTeacher = null;
 
     const translations = {
       kg: {
@@ -420,100 +333,73 @@
         teacherRole: "Окутуучу",
         closeFolderBtn: "Папканы жабуу жана чыгуу",
         uploadBtn: "Жаңы презентация жүктөө (.pdf, .pptx, сүрөт)",
-        uploadHint: "Файлдар 1 жума (7 күн) сакталат жана автоматтык түрдө тазаланат",
-        noFiles: "Бул папкада азырынча файл жок. Жогорудагы баскычты басып презентация жүктөңүз.",
+        uploadHint: "Файлдар серверде сакталат",
+        noFiles: "Бул папкада азырынча файл жок.",
         openInLesson: "Сабакта ачуу",
         enterPwdHint: "Паролду жазып, кирүү баскычын басыңыз",
         cancelBtn: "Жокко чыгаруу",
-        openBtn: "Ачуу (Кирүү)",
-        pwdError: "Ката сыр сөз! Сураныч, кайра териңиз.",
+        openBtn: "Ачуу",
+        pwdError: "Ката сыр сөз!",
         adminLoginTitle: "Администратордун сыр сөзү",
-        adminLoginHint: "Башкаруу панелине кирүү үчүн мастер-паролду жазыңыз",
+        adminLoginHint: "Мастер-паролду жазыңыз",
         loginBtn: "Кирүү",
-        adminAuthErrorMsg: "Мастер-пароль туура эмес!",
-        adminPanelTitle: "Мугалимдерди жана сыр сөздөрдү башкаруу",
-        adminPanelSubtitle: "Мугалимдердин маалыматы, сыр сөздөрү жана түзөтүүлөр",
-        addTeacherBtn: "Жаңы мугалим кошуу",
-        copyBtn: "Көчүрүп алуу",
-        thName: "Мугалимдин аты-жөнү",
+        adminAuthErrorMsg: "Туура эмес пароль!",
+        adminPanelTitle: "Мугалимдерди башкаруу",
+        addTeacherBtn: "Кошуу",
+        thName: "Аты-жөнү",
         thEmail: "Почтасы",
-        thPassword: "Сыр сөз (Пароль)",
+        thPassword: "Сыр сөз",
         thActions: "Аракеттер",
-        adminNote: "Эскертүү: Паролдор купуя сакталышы керек",
         closeModalBtn: "Жабуу",
-        lblFullName: "Аты-жөнү (ФИО):",
-        lblEmail: "Корпоративдик почтасы (Email):",
-        lblPassword: "Сыр сөз (Пароль):",
-        btnGenPwd: "🎲 Генерация",
         saveBtn: "Сактоо",
-        daysLeftText: "күн калды",
         devLabel: "Иштеп чыккан:"
       },
       ru: {
         appTitle: "Портал учебных материалов",
-        appSubtitle: "Электронный каталог для смарт-панели (75\") в аудиториях",
+        appSubtitle: "Электронный каталог для смарт-панели (75\")",
         searchPlaceholder: "Поиск преподавателя...",
         adminBtn: "Админ-кабинет",
         alphabetLabel: "Алфавит:",
         allAlphabet: "Все",
         totalTeachers: "Всего преподавателей:",
-        clickHint: "Нажмите на свое имя, чтобы открыть папку",
+        clickHint: "Нажмите на свое имя",
         teacherRole: "Преподаватель",
-        closeFolderBtn: "Закрыть папку и выйти",
+        closeFolderBtn: "Закрыть папку",
         uploadBtn: "Загрузить презентацию (.pdf, .pptx, картинку)",
-        uploadHint: "Файлы хранятся 1 неделю (7 дней) и удаляются автоматически",
-        noFiles: "В этой папке пока нет файлов. Нажмите кнопку выше для загрузки.",
+        uploadHint: "Файлы сохраняются на сервере",
+        noFiles: "В этой папке пока нет файлов.",
         openInLesson: "Открыть на уроке",
-        enterPwdHint: "Введите пароль и нажмите войти",
+        enterPwdHint: "Введите пароль",
         cancelBtn: "Отмена",
-        openBtn: "Открыть папку",
-        pwdError: "Неверный пароль! Пожалуйста, повторите ввод.",
+        openBtn: "Войти",
+        pwdError: "Неверный пароль!",
         adminLoginTitle: "Пароль администратора",
-        adminLoginHint: "Введите мастер-пароль для входа в панель управления",
+        adminLoginHint: "Введите мастер-пароль",
         loginBtn: "Войти",
-        adminAuthErrorMsg: "Неверный мастер-пароль!",
-        adminPanelTitle: "Управление преподавателями и паролями",
-        adminPanelSubtitle: "Реестр преподавателей, пароли и редактирование",
-        addTeacherBtn: "Добавить преподавателя",
-        copyBtn: "Копировать всё",
-        thName: "ФИО Преподавателя",
-        thEmail: "Почта (Email)",
-        thPassword: "Секретный пароль",
+        adminAuthErrorMsg: "Неверный пароль!",
+        adminPanelTitle: "Управление преподавателями",
+        addTeacherBtn: "Добавить",
+        thName: "ФИО",
+        thEmail: "Email",
+        thPassword: "Пароль",
         thActions: "Действия",
-        adminNote: "Внимание: пароли строго конфиденциальны",
         closeModalBtn: "Закрыть",
-        lblFullName: "ФИО Преподавателя:",
-        lblEmail: "Корпоративная почта (Email):",
-        lblPassword: "Секретный пароль:",
-        btnGenPwd: "🎲 Генерация",
         saveBtn: "Сохранить",
-        daysLeftText: "дн. осталось",
         devLabel: "Разработчик:"
       }
     };
 
-    let currentLang = 'kg';
-    let currentTeacher = null;
-    let isPwdVisible = false;
-
     function setLanguage(lang) {
       currentLang = lang;
-      document.getElementById('langBtnKG').className = lang === 'kg' 
-        ? "px-4 py-2 rounded-xl font-black text-sm transition-all bg-amber-400 text-slate-950 shadow" 
-        : "px-4 py-2 rounded-xl font-black text-sm transition-all text-blue-200 hover:text-white";
-      document.getElementById('langBtnRU').className = lang === 'ru' 
-        ? "px-4 py-2 rounded-xl font-black text-sm transition-all bg-amber-400 text-slate-950 shadow" 
-        : "px-4 py-2 rounded-xl font-black text-sm transition-all text-blue-200 hover:text-white";
-
+      document.getElementById('langBtnKG').className = lang === 'kg' ? "px-4 py-2 rounded-xl font-black text-sm bg-amber-400 text-slate-950 shadow" : "px-4 py-2 rounded-xl font-black text-sm text-blue-200";
+      document.getElementById('langBtnRU').className = lang === 'ru' ? "px-4 py-2 rounded-xl font-black text-sm bg-amber-400 text-slate-950 shadow" : "px-4 py-2 rounded-xl font-black text-sm text-blue-200";
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[lang][key]) el.innerText = translations[lang][key];
       });
-
       document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
       buildAlphabet();
       renderTeachers(teachersData);
-      if (currentTeacher) loadSavedFiles(currentTeacher.id);
     }
 
     setInterval(() => {
@@ -524,26 +410,19 @@
       const grid = document.getElementById('teachersGrid');
       grid.innerHTML = '';
       document.getElementById('teacherCount').innerText = list.length;
-
       list.forEach(t => {
         const card = document.createElement('div');
         card.className = "bg-white p-6 rounded-3xl shadow-sm hover:shadow-xl border border-slate-200 cursor-pointer active:scale-95 transition-all flex items-center justify-between";
         card.onclick = () => openPwdModal(t);
-
-        const initial = t.name ? t.name[0].toUpperCase() : 'M';
         card.innerHTML = `
           <div class="flex items-center gap-4">
-            <div class="w-16 h-16 bg-blue-100 text-blue-800 font-black text-2xl rounded-2xl flex items-center justify-center shadow-inner">
-              ${initial}
-            </div>
+            <div class="w-16 h-16 bg-blue-100 text-blue-800 font-black text-2xl rounded-2xl flex items-center justify-center">${t.name[0]}</div>
             <div>
-              <h4 class="text-2xl font-bold text-slate-900 leading-tight">${t.name}</h4>
+              <h4 class="text-2xl font-bold text-slate-900">${t.name}</h4>
               <p class="text-slate-400 text-sm mt-1">${translations[currentLang].teacherRole}</p>
             </div>
           </div>
-          <div class="text-slate-300">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-          </div>
+          <div class="text-slate-300">🔒</div>
         `;
         grid.appendChild(card);
       });
@@ -552,35 +431,27 @@
     function buildAlphabet() {
       const letters = [...new Set(teachersData.map(t => t.name[0].toUpperCase()))].sort();
       const container = document.getElementById('alphabetList');
-      container.innerHTML = `
-        <button onclick="renderTeachers(teachersData)" class="px-3.5 py-1.5 bg-blue-600 text-white font-bold rounded-xl text-sm">${translations[currentLang].allAlphabet}</button>
-      `;
+      container.innerHTML = `<button onclick="renderTeachers(teachersData)" class="px-3.5 py-1.5 bg-blue-600 text-white font-bold rounded-xl text-sm">${translations[currentLang].allAlphabet}</button>`;
       letters.forEach(letter => {
         const btn = document.createElement('button');
-        btn.className = "px-3 py-1.5 bg-slate-100 hover:bg-blue-100 text-slate-800 font-bold rounded-xl text-sm transition-all";
+        btn.className = "px-3 py-1.5 bg-slate-100 hover:bg-blue-100 text-slate-800 font-bold rounded-xl text-sm";
         btn.innerText = letter;
-        btn.onclick = () => {
-          const filtered = teachersData.filter(t => t.name.toUpperCase().startsWith(letter));
-          renderTeachers(filtered);
-        };
+        btn.onclick = () => renderTeachers(teachersData.filter(t => t.name.toUpperCase().startsWith(letter)));
         container.appendChild(btn);
       });
     }
 
     document.getElementById('searchInput').addEventListener('input', (e) => {
-      const q = e.target.value.toLowerCase().trim();
-      const filtered = teachersData.filter(t => t.name.toLowerCase().includes(q));
-      renderTeachers(filtered);
+      renderTeachers(teachersData.filter(t => t.name.toLowerCase().includes(e.target.value.toLowerCase().trim())));
     });
 
     function openPwdModal(teacher) {
       currentTeacher = teacher;
-      const inp = document.getElementById('pwdInput');
-      inp.value = '';
+      document.getElementById('pwdInput').value = '';
       document.getElementById('pwdError').classList.add('hidden');
       document.getElementById('pwdModalTeacherName').innerText = teacher.name;
       document.getElementById('pwdModal').classList.remove('hidden');
-      setTimeout(() => inp.focus(), 150);
+      setTimeout(() => document.getElementById('pwdInput').focus(), 150);
     }
 
     function cancelPwdModal() {
@@ -589,24 +460,19 @@
     }
 
     function togglePwdVisibility() {
-      isPwdVisible = !isPwdVisible;
-      document.getElementById('pwdInput').type = isPwdVisible ? 'text' : 'password';
+      const inp = document.getElementById('pwdInput');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
     }
 
     function handlePasswordSubmit(e) {
       e.preventDefault();
       if (!currentTeacher) return;
-      const val = document.getElementById('pwdInput').value.trim();
-
-      if (val === currentTeacher.password) {
+      if (document.getElementById('pwdInput').value.trim() === currentTeacher.password) {
         document.getElementById('pwdModal').classList.add('hidden');
         showFolder(currentTeacher);
       } else {
-        const err = document.getElementById('pwdError');
-        err.innerText = translations[currentLang].pwdError;
-        err.classList.remove('hidden');
+        document.getElementById('pwdError').classList.remove('hidden');
         document.getElementById('pwdInput').value = '';
-        document.getElementById('pwdInput').focus();
       }
     }
 
@@ -615,7 +481,7 @@
       document.getElementById('folderView').classList.remove('hidden');
       document.getElementById('activeTeacherName').innerText = teacher.name;
       document.getElementById('activeTeacherEmail').innerText = teacher.email;
-      loadSavedFiles(teacher.id);
+      loadServerFiles(teacher.id);
     }
 
     function closeFolder() {
@@ -624,199 +490,90 @@
       currentTeacher = null;
     }
 
-    async function uploadLocalFile(event) {
+    // Хранение файлов через localStorage списка ссылок для простоты работы с PHP-папкой
+    function getFilesStorage() {
+      return JSON.parse(localStorage.getItem('college_server_files_v1') || '{}');
+    }
+
+    function saveFilesStorage(store) {
+      localStorage.setItem('college_server_files_v1', JSON.stringify(store));
+    }
+
+    async function uploadFileToServer(event) {
       const files = event.target.files;
       if (!files.length || !currentTeacher) return;
 
       const status = document.getElementById('uploadStatusText');
-      status.innerText = currentLang === 'kg' ? 'Жүктөлүүдө, күтө туруңуз...' : 'Файлы загружаются в память...';
+      status.innerText = "Серверге жүктөлүүдө...";
 
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const record = {
-          teacherId: currentTeacher.id,
-          name: file.name,
-          size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-          date: new Date().toLocaleDateString(),
-          timestamp: Date.now(),
-          blob: file
-        };
-        await dbSaveFile(record);
-      }
+        const formData = new FormData();
+        formData.append('file', files[i]);
+        formData.append('teacherId', currentTeacher.id);
 
-      status.innerText = translations[currentLang].uploadHint;
-      await loadSavedFiles(currentTeacher.id);
-      event.target.value = '';
-    }
-
-    let currentTeacherFilesCache = [];
-
-    async function loadSavedFiles(teacherId) {
-      const list = document.getElementById('fileList');
-      list.innerHTML = '';
-
-      const now = Date.now();
-      let allFiles = await dbGetFilesByTeacher(teacherId);
-
-      for (const f of allFiles) {
-        if (f.timestamp && (now - f.timestamp > ONE_WEEK_MS)) {
-          await dbDeleteFile(f.id);
+        try {
+          const response = await fetch('upload.php', {
+            method: 'POST',
+            body: formData
+          });
+          const result = await response.json();
+          if (result.success) {
+            let store = getFilesStorage();
+            if (!store[currentTeacher.id]) store[currentTeacher.id] = [];
+            store[currentTeacher.id].push(result.file);
+            saveFilesStorage(store);
+          }
+        } catch (err) {
+          console.error(err);
         }
       }
 
-      currentTeacherFilesCache = await dbGetFilesByTeacher(teacherId);
+      status.innerText = translations[currentLang].uploadHint;
+      loadServerFiles(currentTeacher.id);
+      event.target.value = '';
+    }
 
-      if (currentTeacherFilesCache.length === 0) {
+    function loadServerFiles(teacherId) {
+      const list = document.getElementById('fileList');
+      list.innerHTML = '';
+      const store = getFilesStorage();
+      const files = store[teacherId] || [];
+
+      if (files.length === 0) {
         list.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 text-2xl font-bold">${translations[currentLang].noFiles}</div>`;
         return;
       }
 
-      currentTeacherFilesCache.forEach((f) => {
+      files.forEach((f, idx) => {
         const card = document.createElement('div');
         card.className = "bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between";
-        
-        let badge = 'FILE';
-        if (f.name.match(/\.(ppt|pptx)$/i)) badge = 'PPT';
-        else if (f.name.match(/\.pdf$/i)) badge = 'PDF';
-        else if (f.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)) badge = 'IMG';
-
-        const daysLeft = f.timestamp 
-          ? Math.max(1, Math.ceil((ONE_WEEK_MS - (now - f.timestamp)) / (24 * 60 * 60 * 1000)))
-          : 7;
-
         card.innerHTML = `
           <div>
             <div class="flex items-center justify-between mb-3">
-              <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold">${badge}</div>
-              <span class="text-xs font-bold px-3 py-1 bg-amber-50 text-amber-700 rounded-full border border-amber-200">
-                ⏳ ${daysLeft} ${translations[currentLang].daysLeftText}
-              </span>
+              <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold">DOC</div>
             </div>
             <h5 class="text-xl font-bold text-slate-800 break-words mb-1">${f.name}</h5>
             <p class="text-slate-400 text-sm">${f.size} • ${f.date}</p>
           </div>
           <div class="mt-6 flex gap-3">
-            <button onclick="viewLessonFile(${f.id})" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold shadow-md active:scale-95 transition-all">
+            <a href="${f.url}" target="_blank" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3.5 rounded-xl text-lg font-bold shadow-md">
               ${translations[currentLang].openInLesson}
-            </button>
-            <button onclick="removeSavedFile(${f.id})" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-4 py-3.5 rounded-xl font-bold">🗑</button>
+            </a>
+            <button onclick="removeServerFile(${teacherId}, ${idx})" class="bg-rose-50 text-rose-600 px-4 py-3.5 rounded-xl font-bold">🗑</button>
           </div>
         `;
         list.appendChild(card);
       });
     }
 
-    // ЛОГИКА ПРОСМОТРА PDF.JS
-    let activeObjectUrl = null;
-    let currentPdfDoc = null;
-    let currentPdfPage = 1;
-
-    function renderPdfPage(num) {
-      if (!currentPdfDoc) return;
-      currentPdfDoc.getPage(num).then(page => {
-        const canvas = document.getElementById('pdfCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const viewport = page.getViewport({ scale: 1.4 });
-
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        page.render({
-          canvasContext: ctx,
-          viewport: viewport
-        });
-
-        document.getElementById('pdfPageNum').innerText = `${num} / ${currentPdfDoc.numPages}`;
-      });
-    }
-
-    function prevPdfPage() {
-      if (currentPdfPage <= 1) return;
-      currentPdfPage--;
-      renderPdfPage(currentPdfPage);
-    }
-
-    function nextPdfPage() {
-      if (!currentPdfDoc || currentPdfPage >= currentPdfDoc.numPages) return;
-      currentPdfPage++;
-      renderPdfPage(currentPdfPage);
-    }
-
-    function viewLessonFile(fileId) {
-      const file = currentTeacherFilesCache.find(item => item.id === fileId);
-      if (!file || !file.blob) {
-        alert('Файл табылган жок!');
-        return;
-      }
-
-      if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
-      activeObjectUrl = URL.createObjectURL(file.blob);
-
-      const viewer = document.getElementById('fullViewerModal');
-      const container = document.getElementById('viewerContent');
-      document.getElementById('viewerFileName').innerText = file.name;
-
-      if (file.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
-        container.innerHTML = `<img src="${activeObjectUrl}" class="max-h-[85vh] max-w-full object-contain mx-auto rounded-xl shadow-2xl">`;
-      } else if (file.name.match(/\.pdf$/i)) {
-        container.innerHTML = `
-          <div class="flex flex-col items-center w-full h-full max-h-[88vh]">
-            <div class="flex items-center gap-6 bg-slate-900/90 px-8 py-3 rounded-2xl mb-3 text-white border border-slate-700 shadow-xl">
-              <button onclick="prevPdfPage()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-xl font-black text-xl active:scale-95 transition-all">◀ Мурунку</button>
-              <span id="pdfPageNum" class="font-mono text-2xl font-black text-amber-300">1 / 1</span>
-              <button onclick="nextPdfPage()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-xl font-black text-xl active:scale-95 transition-all">Кийинки ▶</button>
-            </div>
-            <div class="flex-1 w-full overflow-auto flex justify-center bg-slate-800/50 rounded-2xl p-4">
-              <canvas id="pdfCanvas" class="shadow-2xl rounded-xl max-h-[76vh] object-contain"></canvas>
-            </div>
-          </div>
-        `;
-
-        const fileReader = new FileReader();
-        fileReader.onload = function() {
-          const typedarray = new Uint8Array(this.result);
-          pdfjsLib.getDocument(typedarray).promise.then(pdf => {
-            currentPdfDoc = pdf;
-            currentPdfPage = 1;
-            renderPdfPage(currentPdfPage);
-          });
-        };
-        fileReader.readAsArrayBuffer(file.blob);
-      } else {
-        container.innerHTML = `
-          <div class="text-center py-10 text-white max-w-xl mx-auto space-y-6">
-            <div class="text-8xl">📊</div>
-            <h3 class="text-3xl font-black text-amber-300 break-words">${file.name}</h3>
-            <p class="text-slate-200 text-lg leading-relaxed">
-              Презентация сабакка даяр. Смарт-панелдеги PowerPoint же WPS программасында ачуу үчүн басыңыз:
-            </p>
-            <div class="pt-2">
-              <a href="${activeObjectUrl}" download="${file.name}" class="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-5 rounded-2xl text-2xl shadow-2xl active:scale-95 transition-all">
-                <span>🖥</span>
-                <span>PowerPoint'те ачуу</span>
-              </a>
-            </div>
-          </div>
-        `;
-      }
-      viewer.classList.remove('hidden');
-    }
-
-    function closeViewerModal() {
-      document.getElementById('fullViewerModal').classList.add('hidden');
-      document.getElementById('viewerContent').innerHTML = '';
-      currentPdfDoc = null;
-      if (activeObjectUrl) {
-        URL.revokeObjectURL(activeObjectUrl);
-        activeObjectUrl = null;
-      }
-    }
-
-    async function removeSavedFile(fileId) {
-      if (confirm('Бул файл өчүрүлсүнбү?')) {
-        await dbDeleteFile(fileId);
-        if (currentTeacher) loadSavedFiles(currentTeacher.id);
+    function removeServerFile(teacherId, index) {
+      if (confirm('Өчүрүлсүнбү?')) {
+        let store = getFilesStorage();
+        if (store[teacherId]) {
+          store[teacherId].splice(index, 1);
+          saveFilesStorage(store);
+          loadServerFiles(teacherId);
+        }
       }
     }
 
@@ -825,140 +582,70 @@
       document.getElementById('adminAuthError').classList.add('hidden');
       document.getElementById('adminAuthModal').classList.remove('hidden');
     }
-
-    function closeAdminAuthModal() {
-      document.getElementById('adminAuthModal').classList.add('hidden');
-    }
-
+    function closeAdminAuthModal() { document.getElementById('adminAuthModal').classList.add('hidden'); }
     function verifyAdminPass(e) {
       e.preventDefault();
-      const entered = document.getElementById('adminMasterPassInput').value.trim();
-      if (entered === MASTER_ADMIN_PASS) {
+      if (document.getElementById('adminMasterPassInput').value.trim() === MASTER_ADMIN_PASS) {
         closeAdminAuthModal();
-        openAdminPanel();
+        document.getElementById('adminPanelModal').classList.remove('hidden');
+        renderAdminRegistry();
       } else {
-        const err = document.getElementById('adminAuthError');
-        err.innerText = translations[currentLang].adminAuthErrorMsg;
-        err.classList.remove('hidden');
+        document.getElementById('adminAuthError').classList.remove('hidden');
       }
     }
-
-    function openAdminPanel() {
-      renderAdminRegistry();
-      document.getElementById('adminPanelModal').classList.remove('hidden');
-    }
-
-    function closeAdminPanel() {
-      document.getElementById('adminPanelModal').classList.add('hidden');
-    }
-
+    function closeAdminPanel() { document.getElementById('adminPanelModal').classList.add('hidden'); }
+    
     function renderAdminRegistry() {
       const tbody = document.getElementById('registryTableBody');
       tbody.innerHTML = '';
       teachersData.forEach((t, i) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="p-3 text-slate-400 font-bold">${i + 1}</td>
-          <td class="p-3 font-bold text-slate-800">${t.name}</td>
-          <td class="p-3 text-slate-500">${t.email}</td>
-          <td class="p-3 text-blue-600 font-mono font-bold text-base bg-blue-50/50">${t.password}</td>
-          <td class="p-3 text-right space-x-2">
-            <button onclick="editTeacher(${t.id})" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs">Оңдоо</button>
-            <button onclick="deleteTeacher(${t.id}, '${t.name}')" class="px-3 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold rounded-lg text-xs">Өчүрүү</button>
-          </td>
-        `;
-        tbody.appendChild(row);
+        tbody.innerHTML += `
+          <tr>
+            <td class="p-3 text-slate-400 font-bold">${i + 1}</td>
+            <td class="p-3 font-bold">${t.name}</td>
+            <td class="p-3 text-slate-500">${t.email}</td>
+            <td class="p-3 text-blue-600 font-mono font-bold">${t.password}</td>
+            <td class="p-3 text-right">
+              <button onclick="deleteTeacher(${t.id})" class="px-3 py-1 bg-rose-50 text-rose-600 font-bold rounded-lg text-xs">Өчүрүү</button>
+            </td>
+          </tr>`;
       });
     }
 
-    function openAddTeacherModal() {
-      document.getElementById('editTeacherId').value = '';
-      document.getElementById('teacherNameInput').value = '';
-      document.getElementById('teacherEmailInput').value = '';
-      generateAutoPassword();
-      document.getElementById('editModalTitle').innerText = currentLang === 'kg' ? 'Жаңы мугалим кошуу' : 'Добавить преподавателя';
-      document.getElementById('teacherEditModal').classList.remove('hidden');
-    }
-
-    function closeTeacherEditModal() {
-      document.getElementById('teacherEditModal').classList.add('hidden');
-    }
-
-    function generateAutoPassword() {
-      const words = ['Alatoo', 'Bilim', 'Ustoz', 'Sabak', 'Kadam', 'Akyl', 'Ordo', 'Birimdik'];
-      const syms = ['@', '#', '!', '$', '*'];
-      const word = words[Math.floor(Math.random() * words.length)];
-      const sym = syms[Math.floor(Math.random() * syms.length)];
-      const num = Math.floor(100 + Math.random() * 900);
-      document.getElementById('teacherPwdInput').value = `${word}${sym}${num}`;
-    }
-
-    function editTeacher(id) {
-      const t = teachersData.find(item => item.id === id);
-      if (!t) return;
-      document.getElementById('editTeacherId').value = t.id;
-      document.getElementById('teacherNameInput').value = t.name;
-      document.getElementById('teacherEmailInput').value = t.email;
-      document.getElementById('teacherPwdInput').value = t.password;
-      document.getElementById('editModalTitle').innerText = currentLang === 'kg' ? 'Мугалимдин маалыматын оңдоо' : 'Редактировать данные преподавателя';
-      document.getElementById('teacherEditModal').classList.remove('hidden');
-    }
-
-    function handleSaveTeacher(e) {
-      e.preventDefault();
-      const id = document.getElementById('editTeacherId').value;
-      const name = document.getElementById('teacherNameInput').value.trim();
-      const email = document.getElementById('teacherEmailInput').value.trim();
-      const password = document.getElementById('teacherPwdInput').value.trim();
-
-      if (id) {
-        const idx = teachersData.findIndex(item => item.id == id);
-        if (idx !== -1) {
-          teachersData[idx] = { ...teachersData[idx], name, email, password };
-        }
-      } else {
-        const newId = teachersData.length > 0 ? Math.max(...teachersData.map(t => t.id)) + 1 : 1;
-        teachersData.push({ id: newId, name, email, password });
-      }
-
-      localStorage.setItem('college_teachers_list_v3', JSON.stringify(teachersData));
-      closeTeacherEditModal();
-      renderAdminRegistry();
-      renderTeachers(teachersData);
-      buildAlphabet();
-      alert(currentLang === 'kg' ? 'Мугалим ийгиликтүү сакталды!' : 'Преподаватель успешно сохранён!');
-    }
-
-    function deleteTeacher(id, name) {
-      const confirmMsg = currentLang === 'kg' ? `«${name}» тизмеден өчүрүлсүнбү?` : `Удалить преподавателя «${name}» из системы?`;
-      if (confirm(confirmMsg)) {
+    function deleteTeacher(id) {
+      if (confirm('Өчүрүлсүнбү?')) {
         teachersData = teachersData.filter(t => t.id !== id);
-        localStorage.setItem('college_teachers_list_v3', JSON.stringify(teachersData));
+        localStorage.setItem('college_teachers_list_php_v1', JSON.stringify(teachersData));
         renderAdminRegistry();
         renderTeachers(teachersData);
         buildAlphabet();
       }
     }
 
-    function copyAllPasswords() {
-      const text = teachersData.map(t => `${t.name}\t${t.email}\t${t.password}`).join('\n');
-      navigator.clipboard.writeText(text).then(() => {
-        alert(currentLang === 'kg' ? 'Бардык сыр сөздөр көчүрүлдү!' : 'Все пароли успешно скопированы!');
-      });
+    function openAddTeacherModal() { document.getElementById('teacherEditModal').classList.remove('hidden'); }
+    function closeTeacherEditModal() { document.getElementById('teacherEditModal').classList.add('hidden'); }
+    function handleSaveTeacher(e) {
+      e.preventDefault();
+      const name = document.getElementById('teacherNameInput').value.trim();
+      const email = document.getElementById('teacherEmailInput').value.trim();
+      const password = document.getElementById('teacherPwdInput').value.trim();
+      const newId = teachersData.length ? Math.max(...teachersData.map(t => t.id)) + 1 : 1;
+      teachersData.push({ id: newId, name, email, password });
+      localStorage.setItem('college_teachers_list_php_v1', JSON.stringify(teachersData));
+      closeTeacherEditModal();
+      renderAdminRegistry();
+      renderTeachers(teachersData);
+      buildAlphabet();
     }
 
     function exportCSV() {
       let csv = '\uFEFF№,ФИО,Email,Password\n';
-      teachersData.forEach((t, i) => {
-        csv += `"${i + 1}","${t.name}","${t.email}","${t.password}"\n`;
-      });
+      teachersData.forEach((t, i) => { csv += `"${i + 1}","${t.name}","${t.email}","${t.password}"\n`; });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.setAttribute('download', `teachers_passwords_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
+      link.setAttribute('download', 'teachers.csv');
       link.click();
-      document.body.removeChild(link);
     }
 
     setLanguage('kg');
